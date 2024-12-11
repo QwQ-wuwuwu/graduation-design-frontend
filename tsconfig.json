@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "module": "ESNext",
+    "skipLibCheck": true, 
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"], // ts默认引用的库
+    "noEmit": true, // 在编译过程中不会生成任何输出文件
+    "resolveJsonModule": true, // ts支持导入json文件
+    "esModuleInterop": true, // ts支持导入es6模块
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
