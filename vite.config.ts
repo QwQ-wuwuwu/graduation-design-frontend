@@ -14,7 +14,8 @@ export default defineConfig({
     __APP_ENV__: {
       BASE_URL: '',
       MODEL_URL: '',
-      COMMON_URL: ''
+      COMMON_URL: '',
+      SECRET_KEY: 'my_secret_key_QAQ-wuwuwu'
     },
   },
   resolve: {

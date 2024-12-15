@@ -1,19 +1,19 @@
-import { cn } from "@/lib/utils"
-import { Textarea } from "@/components/ui/textarea"
+import ArrowDownIcon from "@/components/icons/arrowDown"
 import ArrowUpIcon from "@/components/icons/ArrowUp"
-import { useEffect, useRef, useState } from "react"
-import { chatWithModel } from "@/request/model_api/chat"
 import AttachedIcon from "@/components/icons/attached"
+import StopIcon from "@/components/icons/stop"
 import WebIcon from "@/components/icons/web"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Label } from "@/components/ui/label"
-import StopIcon from "@/components/icons/stop"
-import ArrowDownIcon from "@/components/icons/arrowDown"
+import { cn } from "@/lib/utils"
+import { chatWithModel } from "@/request/model_api/chat"
+import { useEffect, useRef, useState } from "react"
 
 export default function ChatWhithModel({ className }: { className?: string }) {
 
@@ -164,19 +164,19 @@ export default function ChatWhithModel({ className }: { className?: string }) {
     }, [messages])
 
     return <div className={cn(className, '')}>
-        <div ref={scorllareaRef} className={`w-[800px] min-w-[700px] rounded-lg pt-2 pb-[100px] h-[calc(100%-85px-38px)] scrollbar-hide overflow-y-auto m-auto`}>
+        <div ref={scorllareaRef} className={` min-w-[500px] w-[800px] rounded-lg pt-2 pb-[100px] h-[calc(100%-85px-38px)] scrollbar-hide overflow-y-auto m-auto`}>
             {messages.map((message, index) => (
                 message.type === 'model' 
                 ? <div key={index} className="flex justify-start mb-8">
                     <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#111111]">
                         <span className=' text-[11px] text-white font-[550] leading-[40px]'>{'大模型'}</span>
                     </div>
-                    <div className="bg-[#F5F6F8] max-w-[700px] p-2 rounded-lg ml-2">
+                    <div className="bg-[#F5F6F8] max-w-[700px] p-2 rounded-3xl ml-2">
                         {message.content === '' ? '正在思考中...' : message.content}
                     </div>
                 </div>
                 : <div key={index} className="flex justify-end mb-8">
-                    <div className="bg-[#EEF2FF] max-w-[700px] p-2 rounded-lg mr-2">{message.content}</div>
+                    <div className="bg-[#EEF2FF] max-w-[700px] p-2 rounded-3xl mr-2">{message.content}</div>
                     <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#024DE3]">
                         <span className=' text-[11px] text-white font-[550] leading-[40px]'>{user.current.name}</span>
                     </div>
@@ -184,16 +184,16 @@ export default function ChatWhithModel({ className }: { className?: string }) {
             ))}
             <div ref={bottomRef}></div>
         </div>
-        <div className="w-[700px] min-w-[700px] absolute bottom-0 left-[50%] translate-x-[-50%]">
+        <div className="w-[700px] min-w-[500px] absolute bottom-0 left-[50%] translate-x-[-50%]">
             {isShow && <div className="w-10 h-10 rounded-lg mb-3 relative top-0 left-[50%] bg-white translate-x-[-50%] flex justify-center items-center cursor-pointer">
                 {/* @ts-ignore */}
                 <ArrowDownIcon onClick={() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })} />
             </div>}
             <Textarea ref={inputref} placeholder={`给"助手"发送消息`} onInput={handleTextareaInput} value={input}
                 onKeyDown={handleKeydown}
-                className="min-h-[85px] max-h-[200px] resize-none scrollbar-hide bg-[#F4F4F4] placeholder:text-[18px] pb-[40px]">
+                className="min-h-[85px] rounded-3xl max-h-[200px] resize-none scrollbar-hide bg-[#F4F4F4] placeholder:text-[18px] pb-[40px]">
             </Textarea>
-            <div className="w-[680px] h-[35px] bg-[#F4F4F4] relative top-[-36.5px] left-[50%] translate-x-[-50%] flex justify-between items-center">
+            <div className="w-[680px] h-[35px] rounded-3xl bg-[#F4F4F4] relative top-[-36.5px] left-[50%] translate-x-[-50%] flex justify-between items-center">
                 <div className="flex space-x-4">
                     <TooltipProvider delayDuration={500}>
                         <Tooltip>
@@ -224,7 +224,7 @@ export default function ChatWhithModel({ className }: { className?: string }) {
                     : <ArrowUpIcon onClick={handleClick} className="w-6 h-6 cursor-pointer" />}
                 </div>
             </div>
-            <p className="text-center text-[#5D5D5D] pb-2 min-w-[700px] mt-[-30px] text-sm">智能大模型 也可能会犯错。请核查重要信息。</p>
+            <p className="text-center text-[#5D5D5D] pb-2 min-w-[500px] mt-[-30px] text-sm">智能大模型 也可能会犯错。请核查重要信息。</p>
         </div>
     </div>
 }

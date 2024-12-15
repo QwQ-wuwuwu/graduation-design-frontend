@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js'
 
-export const secret_key:string = 'my_secret_key_QAQ-wuwuwu'
+// @ts-ignore
+export const secret_key:string = __APP_ENV__.SECRET_KEY
 
 // 加密
 export const encrypt = (pwd:string):string => {

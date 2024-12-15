@@ -1,5 +1,7 @@
-import { createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
+import { createBrowserRouter } from 'react-router-dom'
+import GuardRouter from './GuardRouter'
+import { MyRoute } from '@/types'
 
 const Login = lazy(() => import('@/pages/LoginPage/index'))
 const Page404 = lazy(() => import('@/pages/Page404'))
@@ -10,19 +12,21 @@ const UserIfonPage = lazy(() => import('@/pages/UserPage/UserIfonPage'))
 const ThemePage = lazy(() => import('@/pages/UserPage/ThemePage'))
 const BuildPage = lazy(() => import('@/pages/BuildPage/index'))
 
-const publicRouter = createBrowserRouter([
+export const routes:MyRoute[] = [
     { path: '/', element: <Login /> },
     { path: '*', element: <Page404/> },
-    { path: '/layout', element: <Layout />, children: [
-        { index: true, element: <ChatPage /> },
-        { path: 'chat', element: <ChatPage /> },
-        { path: 'build', element: <BuildPage /> },
-        { path: 'user', element: <UserPage />, children: [
-            { index: true, element: <UserIfonPage /> },
-            { path: 'info', element: <UserIfonPage /> },
-            { path: 'theme', element: <ThemePage /> },
-        ]}
+    { path: '/layout', element: <GuardRouter><Layout /></GuardRouter>, meta: ['admin', 'user'], children: [
+        { path: '', element: <ChatPage />, meta: ['admin', 'user'] },
+        { path: 'chat', element: <ChatPage />, meta: ['admin', 'user'] },
+        { path: 'build', element: <BuildPage />, meta: ['admin', 'user'] },
+        { path: 'user', element: <UserPage />, meta: ['admin', 'user'],
+            children: [
+            { path: '', element: <UserIfonPage />, meta: ['admin', 'user'] },
+            { path: 'info', element: <UserIfonPage />, meta: ['admin', 'user'] },
+            { path: 'theme', element: <ThemePage />, meta: ['admin', 'user'] },
+        ]},
+        { path: 'system', element: <ChatPage />, meta: ['admin'] }
     ]}
-])
+]
 
-export default publicRouter
+export const router = createBrowserRouter(routes)

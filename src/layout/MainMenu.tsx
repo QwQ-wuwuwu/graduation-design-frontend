@@ -6,6 +6,9 @@ import ModelIcon from "@/components/icons/model"
 import DatasetIcon from "@/components/icons/dataset"
 import SystemIcon from "@/components/icons/system"
 import EvaluationIcon from "@/components/icons/evaluation"
+import PresetIcon from "@/components/icons/preset"
+import TaskIcon from "@/components/icons/task"
+import InterfaceIcon from "@/components/icons/interface"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import { BookOpenIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -35,7 +38,7 @@ export default function MainMenu() {
                     <KnowledgeIcon className='w-8 h-8'/>
                 </NavLinkButton>
                 <NavLinkButton to="/layout/model" value="预置助手">
-                    <ModelIcon className='w-8 h-8'/>
+                    <PresetIcon className='w-8 h-8 p-[2px]'/>
                 </NavLinkButton>
                 <NavLinkButton to="/layout/model" value="模型" textClass="tracking-[14px]">
                     <ModelIcon className='w-8 h-8'/>
@@ -43,11 +46,14 @@ export default function MainMenu() {
                 <NavLinkButton to="/layout/dataset" value="数据集">
                     <DatasetIcon className='w-8 h-8'/>
                 </NavLinkButton>
+                <NavLinkButton to="/layout/dataset" value="任务集">
+                    <TaskIcon className='w-8 h-8 p-[2px]'/>
+                </NavLinkButton>
                 <NavLinkButton to="/layout/evaluation" value="评测" textClass="tracking-[14px]">
                     <EvaluationIcon className='w-8 h-8'/>
                 </NavLinkButton>
                 <NavLinkButton to="/layout/model" value="接口管理">
-                    <ModelIcon className='w-8 h-8'/>
+                    <InterfaceIcon className='w-8 h-8 p-[2px]'/>
                 </NavLinkButton>
                 <NavLinkButton to="/layout/system" value="系统" textClass="tracking-[14px]">
                     <SystemIcon className='w-8 h-8'/>

@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom'
+import page404Src from '@/assets/Page404.gif'
 
 export default function Page404() {
-    return <div>
-        <h1>你访问的页面飞往了月球!</h1>
-        <Link to='/'>回到首页</Link>
+    return <div className=' flex flex-col justify-center items-center'>
+        <img src={page404Src} alt="" className='w-[60%] h-auto bg-no-repeat' />
     </div>
 }

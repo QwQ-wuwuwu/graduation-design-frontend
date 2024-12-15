@@ -62,12 +62,15 @@ export default function Login() {
             return toast({ variant: 'destructive', title: '注册失败', description: '两次输入的密码不一致', duration: 2000 })
         }
         registerApi(name, encrypt(password), secret_key).then(res => {
-            if(res.status === 200) {
+            if(res.data.code === 200) {
                 toast({ variant: 'default', title: '注册成功', description: '即将返回登录', duration: 2000 })
                 timeId = setTimeout(() => {
                     setRegister(false)
                     if(passwordRef.current) passwordRef.current.value = ''
                 }, 3000)
+            } else {
+                toast({ variant: 'destructive', title: '注册失败', description: res.data.message, duration: 2000 })
+                if(nameRef.current) nameRef.current.value = ''
             }
         })
     }

@@ -17,6 +17,7 @@ customAxios.interceptors.request.use((config) => {
 })
 
 customAxios.interceptors.response.use((config) => {
+    // if(config.status === 400) return config
     if(config.status === 401) {
         // @ts-ignore
         location.href = __APP_ENV__.BASE_URL + '/'
