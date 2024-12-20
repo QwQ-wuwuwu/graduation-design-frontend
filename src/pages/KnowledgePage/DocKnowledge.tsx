@@ -1,3 +1,3 @@
 export default function DocKnowledge() {
-    return <div></div>
+    return <div>document knowledge</div>
 }

@@ -62,13 +62,13 @@ export default function HeaderMenu() {
         <div className='w-[160px] h-full pt-4 pl-4'>
             <img src={logoSrc} alt="logo-small" className='m-auto w-[104px] min-w-[104px]' />
         </div>
-        <div className='w-full h-full pt-4 flex justify-center'>
+        <div className='w-full h-full flex justify-center pt-2'>
             {/* 用户设置选项卡 */}
             {currentPath.includes('/layout/user') && <div>
                 <Tabs defaultValue='updateUserInfo' onValueChange={handleTabsChange}>
                     <TabsList className='space-x-3 h-full'>
-                        <TabsTrigger value='updateUserInfo' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />个人中心</TabsTrigger>
-                        <TabsTrigger value='theme' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />主题配色</TabsTrigger>
+                        <TabsTrigger value='updateUserInfo' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />个人中心</TabsTrigger>
+                        <TabsTrigger value='theme' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />主题配色</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>}
@@ -84,8 +84,8 @@ export default function HeaderMenu() {
             {currentPath.includes('/layout/knowledge') && <div>
                 <Tabs defaultValue='doc' onValueChange={handleKnowledgeChange}>
                     <TabsList className='space-x-3 h-full'>
-                        <TabsTrigger value='doc' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />文档知识库</TabsTrigger>
-                        <TabsTrigger value='qa' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />QA知识库</TabsTrigger>
+                        <TabsTrigger value='doc' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />文档知识库</TabsTrigger>
+                        <TabsTrigger value='qa' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />QA知识库</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>}
@@ -93,8 +93,8 @@ export default function HeaderMenu() {
             {currentPath.includes('/layout/model') && <div>
                 <Tabs defaultValue='management' onValueChange={handleModelChange}>
                     <TabsList className='space-x-3 h-full'>
-                        <TabsTrigger value='management' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />模型管理</TabsTrigger>
-                        <TabsTrigger value='finetune' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />模型微调</TabsTrigger>
+                        <TabsTrigger value='management' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型管理</TabsTrigger>
+                        <TabsTrigger value='finetune' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型微调</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>}

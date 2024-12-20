@@ -18,7 +18,7 @@ const TasksetPage = lazy(() => import('@/pages/TasksetPage'))
 const DocKnowledge = lazy(() => import("@/pages/KnowledgePage/DocKnowledge"))
 const QAKnowledge = lazy(() => import("@/pages/KnowledgePage/QAKnowledge"))
 const ApiPage = lazy(() => import('@/pages/ApiPage'))
-const ModelPage = lazy(() => import('@/pages/ModelPage/Management'))
+const ModelPage = lazy(() => import('@/pages/ModelPage'))
 const Mangagement = lazy(() => import('@/pages/ModelPage/Management'))
 const Finetune = lazy(() => import('@/pages/ModelPage/Finetune'))
 
@@ -29,6 +29,7 @@ export const routes:MyRoute[] = [
         { path: 'chat', element: <ChatPage />, meta: ['admin', 'user'] },
         { path: 'build', element: <BuildPage />, meta: ['admin', 'user'] },
         { path: 'model', element: <ModelPage />, meta: ['admin', 'user'], children: [
+            { path: '', element: <Mangagement />, meta: ['admin', 'user'] },
             { path: 'management', element: <Mangagement />, meta: ['admin', 'user'] },
             { path: 'finetune', element: <Finetune />, meta: ['admin', 'user'] },
         ] },
