@@ -1,4 +1,11 @@
 import logoSrc from '@/assets/login-logo-small.png'
+import SearchInput from '@/components/my-ui/SearchInput'
+import { Label } from '@/components/ui/label'
+import {
+    Tabs,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
 import {
     Tooltip,
     TooltipContent,
@@ -7,12 +14,7 @@ import {
 } from "@/components/ui/tooltip"
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    Tabs,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
-import { Label } from '@/components/ui/label'
+import TabIcon from '@/components/icons/tab'
 
 export default function HeaderMenu() {
     const navigate = useNavigate()
@@ -30,6 +32,28 @@ export default function HeaderMenu() {
         }
     }
 
+    const handleKnowledgeChange = (value: string) => {
+        switch (value) {
+            case 'doc':
+                navigate('/layout/knowledge/doc')
+                return
+            case 'qa':
+                navigate('/layout/knowledge/qa')
+                return
+        }
+    }
+
+    const handleModelChange = (value: string) => {
+        switch (value) {
+            case 'management':
+                navigate('/layout/model/management')
+                return
+            case 'finetune':
+                navigate('/layout/model/finetune')
+                return
+        }
+    }
+
     useEffect(() => {
         setCurrentPath(window.location.pathname)
     }, [window.location.pathname])
@@ -39,11 +63,38 @@ export default function HeaderMenu() {
             <img src={logoSrc} alt="logo-small" className='m-auto w-[104px] min-w-[104px]' />
         </div>
         <div className='w-full h-full pt-4 flex justify-center'>
+            {/* 用户设置选项卡 */}
             {currentPath.includes('/layout/user') && <div>
                 <Tabs defaultValue='updateUserInfo' onValueChange={handleTabsChange}>
                     <TabsList className='space-x-3 h-full'>
-                        <TabsTrigger value='updateUserInfo' className='data-[state=active]:text-[#024DE3]'>个人中心</TabsTrigger>
-                        <TabsTrigger value='theme' className='data-[state=active]:text-[#024DE3]'>主题配色</TabsTrigger>
+                        <TabsTrigger value='updateUserInfo' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />个人中心</TabsTrigger>
+                        <TabsTrigger value='theme' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />主题配色</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+            </div>}
+            {/* 构建助手 搜索框 */}
+            {currentPath.includes('/layout/build') && <div>
+                <SearchInput className='w-[300px]' placeholder='搜索您需要的助手' />
+            </div>}
+            {/* 预置助手 搜索框 */}
+            {currentPath.includes('/layout/preset') && <div>
+                <SearchInput className='w-[300px]' placeholder='搜索您需要的预置助手' />
+            </div>}
+            {/* 知识库选项卡 */}
+            {currentPath.includes('/layout/knowledge') && <div>
+                <Tabs defaultValue='doc' onValueChange={handleKnowledgeChange}>
+                    <TabsList className='space-x-3 h-full'>
+                        <TabsTrigger value='doc' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />文档知识库</TabsTrigger>
+                        <TabsTrigger value='qa' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />QA知识库</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+            </div>}
+            {/* 模型选项卡 */}
+            {currentPath.includes('/layout/model') && <div>
+                <Tabs defaultValue='management' onValueChange={handleModelChange}>
+                    <TabsList className='space-x-3 h-full'>
+                        <TabsTrigger value='management' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />模型管理</TabsTrigger>
+                        <TabsTrigger value='finetune' className='data-[state=active]:text-[#024DE3] w-[150px] h-[48px]'><TabIcon className='mr-2' />模型微调</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>}
@@ -58,7 +109,7 @@ export default function HeaderMenu() {
                         </div>
                     </TooltipTrigger>
                     <TooltipContent className='bg-[#024DE3]'>
-                        <Label>{'赵光晶范大哥'}</Label>
+                        <Label>{user.name}</Label>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>

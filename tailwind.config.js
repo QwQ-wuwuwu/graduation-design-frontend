@@ -56,6 +56,28 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
@@ -73,6 +95,27 @@ export default {
 					display: "none",
 				},
 			},
+			".my-scrollbar": { // 
+			// 自定义滚动条样式
+				"&::-webkit-scrollbar": {
+					width: "10px",
+					height: "8px",
+				},
+				"&::-webkit-scrollbar-track": {
+					backgroundColor: "#FFFFFF",
+				},
+				"&::-webkit-scrollbar-thumb": {
+					backgroundColor: "#ccc",
+					
+				},
+				"&::-webkit-scrollbar-thumb:hover": {
+					backgroundColor: "#E3E3E3",
+				},
+				"&::-webkit-scrollbar-thumb": {
+					backgroundColor: "#E3E3E3",
+				},
+				cursor: "auto",
+			}
 		})
 	}) 
 ],

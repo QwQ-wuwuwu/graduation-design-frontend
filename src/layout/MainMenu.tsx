@@ -25,6 +25,9 @@ function NavLinkButton({children, value, to, textClass}:
 }
 
 export default function MainMenu() {
+
+    const user = JSON.parse(sessionStorage.getItem('user') as string)
+
     return <div className="bg-[#F4F5F8] w-full h-[calc(100%-65px)] flex">
         <div className="w-[184px] h-full">
             <div className=" pl-3 flex flex-col space-y-2">
@@ -37,27 +40,27 @@ export default function MainMenu() {
                 <NavLinkButton to="/layout/knowledge" value="知识库">
                     <KnowledgeIcon className='w-8 h-8'/>
                 </NavLinkButton>
-                <NavLinkButton to="/layout/model" value="预置助手">
+                {user.role === 0 && <NavLinkButton to="/layout/preset" value="预置助手">
                     <PresetIcon className='w-8 h-8 p-[2px]'/>
-                </NavLinkButton>
+                </NavLinkButton>}
                 <NavLinkButton to="/layout/model" value="模型" textClass="tracking-[14px]">
                     <ModelIcon className='w-8 h-8'/>
                 </NavLinkButton>
-                <NavLinkButton to="/layout/dataset" value="数据集">
+                {user.role === 0 && <NavLinkButton to="/layout/dataset" value="数据集">
                     <DatasetIcon className='w-8 h-8'/>
-                </NavLinkButton>
-                <NavLinkButton to="/layout/dataset" value="任务集">
+                </NavLinkButton>}
+                {user.role === 0 && <NavLinkButton to="/layout/taskset" value="任务" textClass="tracking-[14px]">
                     <TaskIcon className='w-8 h-8 p-[2px]'/>
-                </NavLinkButton>
+                </NavLinkButton>}
                 <NavLinkButton to="/layout/evaluation" value="评测" textClass="tracking-[14px]">
                     <EvaluationIcon className='w-8 h-8'/>
                 </NavLinkButton>
-                <NavLinkButton to="/layout/model" value="接口管理">
+                {user.role === 0 && <NavLinkButton to="/layout/api" value="接口管理">
                     <InterfaceIcon className='w-8 h-8 p-[2px]'/>
-                </NavLinkButton>
-                <NavLinkButton to="/layout/system" value="系统" textClass="tracking-[14px]">
+                </NavLinkButton>}
+                {user.role === 0 && <NavLinkButton to="/layout/system" value="系统" textClass="tracking-[14px]">
                     <SystemIcon className='w-8 h-8'/>
-                </NavLinkButton>
+                </NavLinkButton>}
             </div>
             <div className=" absolute bottom-4 pl-2">
                 <div className="flex space-x-3">

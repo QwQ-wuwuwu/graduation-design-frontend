@@ -4,3 +4,7 @@ export interface MyRoute {
     meta?: string[],
     children?: MyRoute[]
 }
+export interface User {
+    name: string,
+    role: number
+}

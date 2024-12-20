@@ -24,6 +24,7 @@ export default function ChatWhithModel({ className }: { className?: string }) {
     const inputref = useRef<HTMLTextAreaElement>(null)
     const [timeId, setTimeId] = useState<any>(null)
     const [isShow, setIsShow] = useState(false)
+    const [disabled, setDisabled] = useState(false)
 
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
@@ -119,7 +120,7 @@ export default function ChatWhithModel({ className }: { className?: string }) {
             "messages": [
                {
                   "role": "system",
-                  "content": "你是智酱，是由智匠MindCraft开发的智能机器人，你是人类的好朋友，帮助他们解决各种问题。"
+                  "content": "你是一个命理大师，你拥有丰富的经验与见识，并且你不会回答除命理相关的问题"
                },
                {
                   "role": "user",
@@ -133,6 +134,7 @@ export default function ChatWhithModel({ className }: { className?: string }) {
         });
         setMessages([...messages,{ type: 'user', content: tempInput}, { type: 'model', content: '' }])
         setInput('')
+        setDisabled(true)
         chatWithModel(data).then(res => {
             const result = res.data.choices[0].message.content
             let index = 0, str = ''
@@ -145,13 +147,19 @@ export default function ChatWhithModel({ className }: { className?: string }) {
                 if(index >= result.length - 1) {
                     clearInterval(id)
                     setTimeId(null)
+                    setDisabled(false)
                 }
             }, 100)
             setTimeId(id)
         }, () => {
-            setMessages(pre => [...pre,{ type: 'user', content: tempInput}, { type: 'model', content: '哎呦~网络似乎出了点小问题呢' }])
+            setDisabled(false)
+            setMessages(pre => pre.map((msg) => msg.content === '' ? { type: 'model', content: '哎呦~网络似乎出了点小问题呢' } : msg))
         })
     }
+
+    useEffect(() => { // 助手回答完毕自动聚焦输入框
+        !disabled && inputref.current?.focus()
+    }, [disabled])
 
     const handleKeydown = (e:any) => {
         if(e.ctrlKey && e.key === 'Enter') {
@@ -163,20 +171,20 @@ export default function ChatWhithModel({ className }: { className?: string }) {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) // 自动聚焦会话页面底部
     }, [messages])
 
-    return <div className={cn(className, '')}>
-        <div ref={scorllareaRef} className={` min-w-[500px] w-[800px] rounded-lg pt-2 pb-[100px] h-[calc(100%-85px-38px)] scrollbar-hide overflow-y-auto m-auto`}>
+    return <div className={cn(className, ' bg-gradient-to-r from-white to-[#F4F5F8]')}>
+        <div ref={scorllareaRef} className={`max-w-[700px] min-w-[400px] rounded-lg pt-2 pb-[100px] h-[calc(100%-85px-38px)] scrollbar-hide overflow-y-auto m-auto`}>
             {messages.map((message, index) => (
                 message.type === 'model' 
                 ? <div key={index} className="flex justify-start mb-8">
                     <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#111111]">
                         <span className=' text-[11px] text-white font-[550] leading-[40px]'>{'大模型'}</span>
                     </div>
-                    <div className="bg-[#F5F6F8] max-w-[700px] p-2 rounded-3xl ml-2">
+                    <div className="bg-[#F5F6F8] max-w-[600px] p-2 rounded-xl ml-2">
                         {message.content === '' ? '正在思考中...' : message.content}
                     </div>
                 </div>
                 : <div key={index} className="flex justify-end mb-8">
-                    <div className="bg-[#EEF2FF] max-w-[700px] p-2 rounded-3xl mr-2">{message.content}</div>
+                    <div className="bg-[#EEF2FF] max-w-[600px] p-2 rounded-xl mr-2">{message.content}</div>
                     <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#024DE3]">
                         <span className=' text-[11px] text-white font-[550] leading-[40px]'>{user.current.name}</span>
                     </div>
@@ -184,16 +192,16 @@ export default function ChatWhithModel({ className }: { className?: string }) {
             ))}
             <div ref={bottomRef}></div>
         </div>
-        <div className="w-[700px] min-w-[500px] absolute bottom-0 left-[50%] translate-x-[-50%]">
+        <div className="w-[600px] min-w-[300px] absolute bottom-0 left-[50%] translate-x-[-50%]">
             {isShow && <div className="w-10 h-10 rounded-lg mb-3 relative top-0 left-[50%] bg-white translate-x-[-50%] flex justify-center items-center cursor-pointer">
                 {/* @ts-ignore */}
                 <ArrowDownIcon onClick={() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })} />
             </div>}
-            <Textarea ref={inputref} placeholder={`给"助手"发送消息`} onInput={handleTextareaInput} value={input}
+            <Textarea disabled={disabled} ref={inputref} placeholder={`给"助手"发送消息`} onInput={handleTextareaInput} value={input}
                 onKeyDown={handleKeydown}
                 className="min-h-[85px] rounded-3xl max-h-[200px] resize-none scrollbar-hide bg-[#F4F4F4] placeholder:text-[18px] pb-[40px]">
             </Textarea>
-            <div className="w-[680px] h-[35px] rounded-3xl bg-[#F4F4F4] relative top-[-36.5px] left-[50%] translate-x-[-50%] flex justify-between items-center">
+            <div className="w-[580px] h-[35px] rounded-3xl bg-opacity-0 bg-[#F4F4F4] relative top-[-36.5px] left-[50%] translate-x-[-50%] flex justify-between items-center">
                 <div className="flex space-x-4">
                     <TooltipProvider delayDuration={500}>
                         <Tooltip>
@@ -216,12 +224,12 @@ export default function ChatWhithModel({ className }: { className?: string }) {
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <div className="hover:text-gray-500 bg-white rounded-lg">
+                <div className="bg-[black] hover:bg-slate-700 rounded-[100%]">
                     {timeId 
                     // @ts-ignore
-                    ? <StopIcon onClick={() => {clearInterval(timeId); setTimeId(null)}} className="w-6 h-6 cursor-pointer" />
+                    ? <StopIcon onClick={() => {clearInterval(timeId); setTimeId(null)}} className="w-6 h-6 text-white cursor-pointer" />
                     // @ts-ignore
-                    : <ArrowUpIcon onClick={handleClick} className="w-6 h-6 cursor-pointer" />}
+                    : <ArrowUpIcon onClick={handleClick} className="w-6 h-6 text-white cursor-pointer" />}
                 </div>
             </div>
             <p className="text-center text-[#5D5D5D] pb-2 min-w-[500px] mt-[-30px] text-sm">智能大模型 也可能会犯错。请核查重要信息。</p>

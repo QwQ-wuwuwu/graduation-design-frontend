@@ -1,4 +1,4 @@
-import customAxios from '../model_axios'
+import customAxios from '../minecraft_axios'
 
 export const getChatModel = async () => {
     return await customAxios.get('/model_config')

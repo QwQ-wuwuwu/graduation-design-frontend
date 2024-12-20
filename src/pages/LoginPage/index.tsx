@@ -7,7 +7,7 @@ import { BookOpenIcon } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { registerApi, loginApi } from '@/request/API/user'
-import { encrypt, secret_key } from '@/util/cryptoPwd'
+import { encrypt } from '@/util/cryptoPwd'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
@@ -31,8 +31,9 @@ export default function Login() {
             passwordRef.current?.focus()
             return toast({ variant: 'destructive', title: '登录失败', description: '密码不能为空', duration: 2000 })
         }
-        loginApi(name, encrypt(password), secret_key).then((res:any) => {
+        loginApi(name, encrypt(password)).then((res:any) => {
             const data = res.data
+            if(data.code === 400) return toast({ variant: 'destructive', title: '登录失败', description: data.message, duration: 2000 })
             data.token && sessionStorage.setItem('token', data.token)
             sessionStorage.setItem('user', JSON.stringify(data.data))
             navigate('/layout/chat')
@@ -61,7 +62,7 @@ export default function Login() {
             passwordRef.current?.focus()
             return toast({ variant: 'destructive', title: '注册失败', description: '两次输入的密码不一致', duration: 2000 })
         }
-        registerApi(name, encrypt(password), secret_key).then(res => {
+        registerApi(name, encrypt(password)).then(res => {
             if(res.data.code === 200) {
                 toast({ variant: 'default', title: '注册成功', description: '即将返回登录', duration: 2000 })
                 timeId = setTimeout(() => {

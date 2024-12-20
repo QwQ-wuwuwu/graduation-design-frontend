@@ -1,14 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom"
 import { routes } from './index'
 import { MyRoute } from "@/types"
-import { UserContext } from "@/contexts/UserContext";
-import { useContext } from "react";
 
 export default function GuardRouter({ children }: any) { // 守卫路由
 
     const token = sessionStorage.getItem('token') || ''
     const location = useLocation() // 获取当前路径
-    const user = useContext(UserContext)
+    const user = JSON.parse(sessionStorage.getItem('user') as string)
     const routeMap: { [key: string]: any } = {};
 
     const generateRouteMap = (routes: MyRoute[], prePath: string) => {
