@@ -1,6 +1,9 @@
 import ArrowRightIcon from "@/components/icons/arrowRight"
+import DeleteIcon from "@/components/icons/delete"
 import PlusIcon from "@/components/icons/plus"
 import RobotIcon from "@/components/icons/robot"
+import SettingIcon from "@/components/icons/setting"
+import UserIcon from "@/components/icons/user"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -26,9 +29,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { getRandomColor } from "@/util/randomColor"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import UserIcon from "@/components/icons/user"
-import SettingIcon from "@/components/icons/setting"
-import DeleteIcon from "@/components/icons/delete"
+import { Switch } from "@/components/ui/switch"
 
 function BuildDialog({ children, onBuild }: { children: React.ReactNode, onBuild: () => void }) {
     return <Dialog>
@@ -85,28 +86,31 @@ export default function BuildPage() {
     ]
     const [assistants, setAssistants] = useState(data)
 
-    const handleCilck = () => {
-        const id = 12
-        navigate(`/layout/assistant?id=${id}`)
+    const handleCreate = () => {
+        navigate(`/layout/assistant`)
     }
 
     const handleSetting = (id: number) => {
-
+        navigate(`/layout/assistant?id=${id}`)
     }
 
     const handleDelete = (id: number) => {
 
     }
 
-    return <div className="w-full max-h-[100%] overflow-y-auto my-scrollbar flex pt-10 pl-[100px] pb-10 flex-wrap items-start">
-        <BuildDialog onBuild={handleCilck}>
+    const handleSwitch = () => {
+
+    }
+
+    return <div className="w-full max-h-[100%] overflow-y-auto my-scrollbar flex pt-10 pl-[100px] pb-16 flex-wrap items-start">
+        <BuildDialog onBuild={handleCreate}>
             <Card className="w-[300px] h-[300px] mr-6 mb-4 group hover:border-dashed hover:border-[#024DE3] cursor-pointer">
                 <CardHeader>
                     <CardTitle className=" flex items-center">
                         <div className="w-6 h-6 group-hover:bg-[#024DE3] rounded-sm bg-black flex mr-6 justify-center items-center">
                             <PlusIcon className=" w-4 h-4 text-white"/>
                         </div>
-                        <span>构建助手</span>
+                        <span className="">构建新的助手</span>
                     </CardTitle>
                     <CardDescription className="pt-4">我们提供场景模板供您使用和参考</CardDescription>
                 </CardHeader>
@@ -117,13 +121,14 @@ export default function BuildPage() {
             </Card>
         </BuildDialog>
         {assistants.map((assistant) => (
-        <Card key={assistant.id} className="w-[300px] mr-6 mb-4 group hover:shadow-lg h-[300px] group cursor-pointer">
+        <Card onClick={() => handleSetting(assistant.id)} key={assistant.id} className="w-[300px] mr-6 mb-4 group hover:shadow-lg h-[300px] group cursor-pointer">
             <CardHeader>
-                <CardTitle className=" flex items-center">
+                <CardTitle className=" flex items-center justify-between">
                     <div className="w-6 h-6 rounded-sm bg-black flex mr-6 justify-center items-center">
                         <PlusIcon className=" w-4 h-4 text-white"/>
                     </div>
                     <span>{assistant.name}</span>
+                    <Switch onClick={(e) => e.stopPropagation()} onChange={handleSwitch} />
                 </CardTitle>
                 <CardDescription className="pt-4 h-[90px]">{assistant.description}</CardDescription>
             </CardHeader>
@@ -142,5 +147,8 @@ export default function BuildPage() {
             </CardFooter>
         </Card>
         ))}
+        <div className=" fixed bottom-0 z-10 bg-white w-full h-16 ml-[-90px] flex items-center">
+            <p className="text-sm text-gray-500">在此页面管理您的助手，对助手上线，下线，编辑等操作. </p>
+        </div>
     </div>
 }

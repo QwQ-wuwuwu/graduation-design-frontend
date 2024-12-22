@@ -81,14 +81,14 @@ export default function BuildAssistant() {
                         </TooltipProvider>
                     </div>
                 </div>
-                <Textarea value={textarea} className="w-[450px] text-[#64748B] h-[600px] m-auto resize-none" />
-                <p className="text-[#64748B] text-sm text-center">根据助手名称和描述，为您自动构建的<span className="text-[#024DE3]">助手画像</span></p>
+                <Textarea value={textarea} className="w-[450px] text-gray-600 h-[600px] m-auto resize-none" />
+                <p className="text-gray-600 text-sm text-center">根据助手名称和描述，为您自动构建的<span className="text-[#024DE3]">助手画像</span></p>
             </div>
             <div className="w-1/2 pt-10 space-y-2 border-l">
                 <div className="w-full h-[50px] flex items-center justify-center">
                     <span>模型配置</span>
                 </div>
-                <div className="text-[#64748B] pl-20 ">
+                <div className="text-gray-600 pl-20 ">
                     <Accordion type="single" collapsible className="w-[550px]">
                         <AccordionItem value="1">
                             <AccordionTrigger><span>您希望助手的主要任务是什么</span></AccordionTrigger>

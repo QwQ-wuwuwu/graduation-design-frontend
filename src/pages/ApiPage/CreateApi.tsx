@@ -15,13 +15,25 @@ import { Select, SelectTrigger, SelectGroup, SelectItem, SelectContent, SelectVa
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
-export default function EditApi({ children, onConfirm }: 
+export default function CreateApi({ children, onConfirm }: 
     { children: React.ReactNode,
       onConfirm: () => void 
     }) {
     
     const [show, setShow] = useState(false)
     const [tokenShow, setTokenShow] = useState(false)
+    const [api_key, setApi_key] = useState(false)
+    const initail = {
+        url: '',
+        task_id: -1,
+        description: '',
+        method: '',
+        token: '',
+        api_key: '',
+        model_id: -1,
+        model_name: ''
+    }
+    const [apiObject, setApiObject] = useState(initail)
 
     const handleCreate = () => {
         onConfirm()
@@ -33,6 +45,10 @@ export default function EditApi({ children, onConfirm }:
         setTokenShow(value === 'yes')
     }
 
+    const handleApiKeyChange = (value: string) => {
+        setApi_key(value === 'yes')
+    }
+
     return <Dialog open={show} onOpenChange={(open) => setShow(open)}>
         <DialogTrigger asChild>
             {children}
@@ -42,21 +58,21 @@ export default function EditApi({ children, onConfirm }:
                 <DialogTitle>创建接口地址</DialogTitle>
                 <DialogDescription></DialogDescription>
             </DialogHeader>
-            <div className="text-gray-500 space-y-4">
+            <div className="space-y-4">
                 <div>
-                    <p>接口地址<span className="text-[red]">*</span></p>
-                    <Input placeholder="https://xxx"></Input>
+                    <p className="text-gray-500">接口地址<span className="text-[red]">*</span></p>
+                    <Input placeholder="https://xxx" value={apiObject.url} onChange={e => setApiObject({...apiObject, url: e.target.value})}></Input>
                 </div>
                 <div>
-                    <p>类型用途<span className="text-[red]">*</span></p>
-                    <Input placeholder="角色扮演"></Input>
+                    <p className="text-gray-500">类型用途<span className="text-[red]">*</span></p>
+                    <Input placeholder="例如：角色扮演"></Input>
                 </div>
                 <div>
-                    <p>接口详细说明</p>
-                    <Textarea placeholder="大模型将扮演您指定的角色，对角色的定位说明越清晰，效果越好"></Textarea>
+                    <p className="text-gray-500">接口详细说明</p>
+                    <Textarea placeholder="使用方法，参数说明，响应情况等"></Textarea>
                 </div>
                 <div>
-                    <p>接口请求方式<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500">接口请求方式<span className="text-[red]">*</span></p>
                     <Select>
                         <SelectTrigger>
                             <SelectValue placeholder='请求方式'></SelectValue>
@@ -72,8 +88,8 @@ export default function EditApi({ children, onConfirm }:
                     </Select>
                 </div>
                 <div className="">
-                    <p>是否携带token</p>
-                    <RadioGroup defaultValue="no" onValueChange={handleRadioChange} className="flex space-x-4">
+                    <p className="text-gray-500">是否携带token</p>
+                    <RadioGroup defaultValue="no" onValueChange={handleRadioChange} className="flex space-x-4 mt-1">
                         <div className=" flex items-center space-x-1">
                             <RadioGroupItem value="yes" id="r1" />
                             <Label htmlFor="r1">携带</Label>
@@ -85,8 +101,22 @@ export default function EditApi({ children, onConfirm }:
                     </RadioGroup>
                     {tokenShow && <Input className="mt-2" placeholder="token"></Input>}
                 </div>
+                <div className="">
+                    <p className="text-gray-500">是否需要api_key</p>
+                    <RadioGroup defaultValue="no" onValueChange={handleApiKeyChange} className="flex space-x-4 mt-1">
+                        <div className=" flex items-center space-x-1">
+                            <RadioGroupItem value="yes" id="a1" />
+                            <Label htmlFor="a1">需要</Label>
+                        </div>
+                        <div className=" flex items-center space-x-1">
+                            <RadioGroupItem value="no" id="a2" />
+                            <Label htmlFor="a2">不需要</Label>
+                        </div>
+                    </RadioGroup>
+                    {api_key && <Input className="mt-2" placeholder="api_key"></Input>}
+                </div>
                 <div>
-                <p>所属模型<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500">所属模型<span className="text-[red]">*</span></p>
                     <Select>
                         <SelectTrigger>
                             <SelectValue placeholder='模型名称'></SelectValue>

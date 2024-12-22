@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils"
 import { chatWithModel } from "@/request/model_api/chat"
 import { useEffect, useRef, useState } from "react"
+import { marked } from 'marked';
 
 export default function ChatWhithModel({ className }: { className?: string }) {
 
@@ -179,9 +180,8 @@ export default function ChatWhithModel({ className }: { className?: string }) {
                     <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#111111]">
                         <span className=' text-[11px] text-white font-[550] leading-[40px]'>{'大模型'}</span>
                     </div>
-                    <div className="bg-[#F5F6F8] max-w-[600px] p-2 rounded-xl ml-2">
-                        {message.content === '' ? '正在思考中...' : message.content}
-                    </div>
+                    <div dangerouslySetInnerHTML={{ __html: message.content === '' ? '正在思考中...' : marked.parse(message.content) }}
+                    className="bg-[#F5F6F8] max-w-[600px] p-2 rounded-xl ml-2 prose prose-md" />
                 </div>
                 : <div key={index} className="flex justify-end mb-8">
                     <div className="bg-[#EEF2FF] max-w-[600px] p-2 rounded-xl mr-2">{message.content}</div>

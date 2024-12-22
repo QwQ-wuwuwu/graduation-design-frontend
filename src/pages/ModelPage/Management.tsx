@@ -53,6 +53,7 @@ export default function Management() {
                         <TableHead>模型名称</TableHead>
                         <TableHead>模型详情</TableHead>
                         <TableHead>模型上下文长度</TableHead>
+                        <TableHead>服务提供方</TableHead>
                         <TableHead>最大输出</TableHead>
                         <TableHead className="text-right">操作</TableHead>
                     </TableRow>
@@ -62,10 +63,11 @@ export default function Management() {
                         <TableCell>{model.name}</TableCell>
                         <TableCell>{model.description}</TableCell>
                         <TableCell>{model.context}</TableCell>
+                        <TableCell>{model.server_from}</TableCell>
                         <TableCell>{model.max_output}</TableCell>
                         <TableCell className="text-right space-x-4">
                             <EditModel id={model.id} onUpdate={getData}>
-                                <Button variant={'link'} className="text-blue-600 px-0">编辑</Button>
+                                <Button variant={'link'} className="text-blue-600 px-0">模型配置</Button>
                             </EditModel>
                             <Alert title="删除模型！" desc={`确认删除模型 ${model.name}吗？`} onConfirm={() => handleDelete(model.id)}>
                                 <Button onClick={() => {}} variant={'link'} className="text-red-500 px-0">删除</Button>

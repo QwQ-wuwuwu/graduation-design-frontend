@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button"
 import PlusIcon from "@/components/icons/plus"
+import { useNavigate } from "react-router-dom"
 
 export default function IndexView() {
+
+    const navigate = useNavigate()
 
     return <div className="w-full h-full flex justify-center items-center flex-col bg-gradient-to-r from-white to-[#F4F5F8]">
         <div className="animation-right flex justify-center">
@@ -13,7 +16,7 @@ export default function IndexView() {
             <span className=" font-thin">专注于提高企业生产效率</span>
         </div>
         <div className="animation-top flex justify-center items-center">
-            <Button className="w-[180px] h-[50px] text-xl rounded-2xl">
+            <Button onClick={() => navigate('/layout/build')} className="w-[180px] h-[50px] text-xl rounded-2xl">
                 <PlusIcon />
                 构建助手
             </Button>
