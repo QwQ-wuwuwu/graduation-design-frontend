@@ -8,7 +8,7 @@ export default function ChatPage() {
     const [chat, setChat] = useState(false)
 
     return <div className="h-full w-full flex">
-        <Sidebar onSelect={(id) => setChat(true)} />
+        <Sidebar onSelect={(id) => {setChat(true); console.log(id)}} />
         {chat ? <ChatWhithModel className="w-[calc(100%-220px)] relative h-full" /> : <IndexView />}
     </div>
 }

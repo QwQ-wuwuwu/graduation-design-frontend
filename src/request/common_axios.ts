@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { toast } from '@/hooks/use-toast';
 
 const customAxios = axios.create({
     baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000,
+    timeout: 5000,
 })
 
 customAxios.interceptors.request.use((config) => { 
@@ -13,6 +14,7 @@ customAxios.interceptors.request.use((config) => {
     token && config.headers.set('Authorization', `Bearer ${token}`)
     return config
 }, (error) => {
+    toast({ title: 'Error！', description: error, variant: 'destructive' })
     return Promise.reject(error)
 })
 
@@ -28,6 +30,7 @@ customAxios.interceptors.response.use((config) => {
     }
     return config
 }, (error) => {
+    toast({ title: 'Error！', description: '服务器异常，请稍后再试', variant: 'destructive' })
     return Promise.reject(error)
 })
 

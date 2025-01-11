@@ -77,7 +77,7 @@ export default function DatasetPage() {
     return <div className="w-full h-full overflow-y-auto my-scrollbar p-2">
         <div className=" fixed right-4 z-10 h-12 flex items-center space-x-4 justify-end">
             <SearchInput placeholder="数据集名称" />
-            <Button className="w-[150px]">创建数据集</Button>
+            <Button onClick={() => setData([])} className="w-[150px]">创建数据集</Button>
         </div>
         <Table className="mt-8 mb-[80px]">
             <TableHeader>

@@ -1,36 +1,31 @@
 import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog"
-import { Button } from "../ui/button"
 import WarnningIcon from "../icons/warnning"
-import { useState } from "react"
+import { Button } from "../ui/button"
 
 export default function Alert(
     { 
-        children,
+        open,
         title,
         desc,
-        onConfirm 
+        onConfirm,
+        onCancel 
     }: 
     { 
-        children: React.ReactNode,
+        open: boolean,
         title: string,
-        desc?: string,
+        desc: string,
         onConfirm: () => void
+        onCancel: () => void
     }) {
 
-    const [open, setOpen] = useState(false)
-
-    return <AlertDialog open={open} onOpenChange={(open) => setOpen(open)}>
-    <AlertDialogTrigger asChild>
-      {children}
-    </AlertDialogTrigger>
+    return <AlertDialog open={open} onOpenChange={() => onCancel()}>
     <AlertDialogContent className="max-w-[400px]">
       <AlertDialogHeader>
         <AlertDialogTitle><WarnningIcon />{title}</AlertDialogTitle>
@@ -39,7 +34,7 @@ export default function Alert(
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter className=" flex justify-center items-center mt-6">
-        <Button variant={'outline'} className="w-[100px]" onClick={() => setOpen(false)}>取消</Button>
+        <Button variant={'outline'} className="w-[100px]" onClick={onCancel}>取消</Button>
         <Button variant={'destructive'} className="w-[100px]" onClick={onConfirm}>确认</Button>
       </AlertDialogFooter>
     </AlertDialogContent>

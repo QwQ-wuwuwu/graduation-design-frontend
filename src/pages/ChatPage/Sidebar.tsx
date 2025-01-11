@@ -1,7 +1,8 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getRandomColor } from "@/util/randomColor"
 import SearchInput from "@/components/my-ui/SearchInput"
 import RobotIcon from "@/components/icons/robot"
+import useAssisOnlineStore from "@/hooks/assistantOnline"
 
 export default function Sidebar(
     { onSelect }: 
@@ -24,6 +25,18 @@ export default function Sidebar(
         { name: '助手四', id: 13, description: '晚上好', target: false },
     ])
     const searchRef = useRef<HTMLInputElement>(null)
+    const onlineId = useAssisOnlineStore((state:any) => state.onlineId)
+    const setOffline = useAssisOnlineStore((state:any) => state.setOffline)
+
+    useEffect(() => {
+        if(onlineId !== -1) {
+            setAssistants(pre => pre.map((assistant) => assistant.id === onlineId 
+            ? { ...assistant, target: true } 
+            : {...assistant, target: false}))
+            onSelect(onlineId)
+        }
+        return () => setOffline()
+    }, [])
 
     const handleClick = (id: number) => {
         setAssistants(pre => pre.map((assistant) => assistant.id === id 

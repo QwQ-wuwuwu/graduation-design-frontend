@@ -40,6 +40,10 @@ function EditModel({ children, id, onCreate, onUpdate }:
     }, [])
 
     const handleCreate = async () => {
+        const { name, server_from } = model
+        if(!name || !server_from) {
+            return toast({ title: '添加失败', description: '模型名称或服务提供方不能为空', variant: 'destructive' })
+        }
         const res = await createModel(model)
         if(res.data.code === 200) {
             setShow(false)
@@ -51,13 +55,17 @@ function EditModel({ children, id, onCreate, onUpdate }:
     }
 
     const handleUpdate = async () => {
+        const { name, server_from } = model
+        if(!name || !server_from) {
+            return toast({ title: '更新失败', description: '模型名称或服务提供方不能为空', variant: 'destructive' })
+        }
         const res = id ? await updateModelById(id, model) : null
         if(res?.data.code === 200) {
             setShow(false)
             onUpdate && onUpdate()
             return toast({ title: '更新成功', description: res.data.message, variant: 'default' })
         }
-        return toast({ title: '添加失败', description: res?.data.message, variant: 'destructive' })
+        return toast({ title: '更新失败', description: res?.data.message, variant: 'destructive' })
     }
 
     return <Dialog open={show} onOpenChange={(open) => setShow(open)}>
@@ -92,7 +100,7 @@ function EditModel({ children, id, onCreate, onUpdate }:
             <DialogFooter>
                 <Button variant={'outline'} className="w-[100px]" onClick={() => setShow(false)}>取消</Button>
                 {!id ? <Button onClick={handleCreate} className="w-[100px]">添加</Button>
-                    : <Button onClick={handleUpdate} className="w-[100px]">修改</Button>}
+                    : <Button onClick={handleUpdate} className="w-[100px]">更新</Button>}
             </DialogFooter>
         </DialogContent>
     </Dialog>

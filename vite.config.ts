@@ -13,8 +13,6 @@ export default defineConfig({
   define: { // 定义全局变量
     __APP_ENV__: {
       BASE_URL: '',
-      MODEL_URL: '',
-      COMMON_URL: '',
       SECRET_KEY: 'my_secret_key_QAQ-wuwuwu'
     },
   },
@@ -24,10 +22,14 @@ export default defineConfig({
     },
     extensions: ['.ts', '.tsx', '.json']
   },
+  logLevel: 'info',
+  clearScreen: false, // 终端禁止清屏
+  appType: 'spa',
   optimizeDeps: {
     force: true // 强制预构建，可能导致构建速度变慢
   },
   build: {
+    assetsInlineLimit: 4096, // 小于4kb的文件会被内联
     outDir: 'dist',
     rollupOptions: {
       output: {

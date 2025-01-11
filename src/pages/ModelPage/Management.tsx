@@ -23,6 +23,13 @@ export default function Management() {
     }
     const [modelList, setModelList] = useState([])
     const { toast } = useToast()
+    const initial = {
+        open: false,
+        id: -1,
+        title: '删除模型！',
+        name: ''
+    }
+    const [openDelete, setOpenDelete] = useState(initial)
 
     const refresh = useCallback(throttle(getData, 1000), []) // 用useCallback缓存节流函数，不然每次都会创建新的节流函数，无法做到节流效果
 
@@ -30,6 +37,7 @@ export default function Management() {
         const { data: { code } } = await deleteModelById(id)
         if(code === 200) {
             getData()
+            setOpenDelete(initial)
             return toast({ title: '删除成功', description: '模型删除成功', variant: 'default' })
         }
     }
@@ -51,7 +59,7 @@ export default function Management() {
                 <TableHeader>
                     <TableRow>
                         <TableHead>模型名称</TableHead>
-                        <TableHead>模型详情</TableHead>
+                        <TableHead className="max-w-[300px]">模型详情</TableHead>
                         <TableHead>模型上下文长度</TableHead>
                         <TableHead>服务提供方</TableHead>
                         <TableHead>最大输出</TableHead>
@@ -61,7 +69,7 @@ export default function Management() {
                 <TableBody>
                     {modelList.map((model:any) => <TableRow key={model.id}>
                         <TableCell>{model.name}</TableCell>
-                        <TableCell>{model.description}</TableCell>
+                        <TableCell className="max-w-[300px]">{model.description}</TableCell>
                         <TableCell>{model.context}</TableCell>
                         <TableCell>{model.server_from}</TableCell>
                         <TableCell>{model.max_output}</TableCell>
@@ -69,9 +77,7 @@ export default function Management() {
                             <EditModel id={model.id} onUpdate={getData}>
                                 <Button variant={'link'} className="text-blue-600 px-0">模型配置</Button>
                             </EditModel>
-                            <Alert title="删除模型！" desc={`确认删除模型 ${model.name}吗？`} onConfirm={() => handleDelete(model.id)}>
-                                <Button onClick={() => {}} variant={'link'} className="text-red-500 px-0">删除</Button>
-                            </Alert>
+                            <Button onClick={() => setOpenDelete({ ...openDelete, open: true, id: model.id, name: model.name })} variant={'link'} className="text-red-500 px-0">删除</Button>
                         </TableCell>
                     </TableRow>)}
                 </TableBody>
@@ -80,5 +86,8 @@ export default function Management() {
         <div className="w-full h-16 flex items-center">
             <p className="text-sm text-gray-500">模型集合. </p>
         </div>
+        <Alert open={openDelete.open} title={openDelete.title} desc={`确认删除模型 ${openDelete.name}吗？`} 
+        onCancel={() => setOpenDelete(initial)}
+        onConfirm={() => handleDelete(openDelete.id)}/>
     </div>
 }

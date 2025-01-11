@@ -21,20 +21,29 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { getRandomColor } from "@/util/randomColor"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import useIndexViewBuildStore from "@/hooks/indexViewBuild"
+import { getRandomColor } from "@/util/randomColor"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-function BuildDialog({ children, onBuild }: { children: React.ReactNode, onBuild: () => void }) {
-    return <Dialog>
-        <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent>
+function BuildDialog({ open, onCancel, onBuild }: 
+    { 
+        open: boolean,
+        onCancel: () => void,
+        onBuild: () => void 
+    }) {
+
+    const handleCreate = () => {
+        onBuild()
+    }
+    
+    return <Dialog open={open} onOpenChange={onCancel}>
+        <DialogContent className="max-w-[625px]">
             <DialogHeader className="mb-2">
                 <DialogTitle>构建助手</DialogTitle>
                 <DialogDescription>根据您的需求为您量身构建助手</DialogDescription>
@@ -57,8 +66,8 @@ function BuildDialog({ children, onBuild }: { children: React.ReactNode, onBuild
             </div>
             <DialogFooter>
                 <DialogClose className="space-x-4">
-                    <Button className="w-[100px]" variant={'outline'}>取消</Button>
-                    <Button className="w-[100px]" onClick={onBuild}>创建</Button>
+                    <Button onClick={onCancel} className="w-[100px]" variant={'outline'}>取消</Button>
+                    <Button className="w-[100px]" onClick={handleCreate}>创建</Button>
                 </DialogClose>
             </DialogFooter>
         </DialogContent>
@@ -85,8 +94,19 @@ export default function BuildPage() {
         { name: '助手四', id: 13, description: '晚上好', target: false },
     ]
     const [assistants, setAssistants] = useState(data)
+    const [open, setOpen] = useState(false)
+    const build = useIndexViewBuildStore((state: any) => state.build)
+    const setUnBuild = useIndexViewBuildStore((state: any) => state.setUnBuild)
+    useEffect(() => {
+        build && setOpen(true)
+        return () => {
+            setUnBuild()
+        }
+    }, [])
 
     const handleCreate = () => {
+        setOpen(false)
+        setAssistants([])
         navigate(`/layout/assistant`)
     }
 
@@ -95,7 +115,7 @@ export default function BuildPage() {
     }
 
     const handleDelete = (id: number) => {
-
+        console.log(id)
     }
 
     const handleSwitch = () => {
@@ -103,23 +123,22 @@ export default function BuildPage() {
     }
 
     return <div className="w-full max-h-[100%] overflow-y-auto my-scrollbar flex pt-10 pl-[100px] pb-16 flex-wrap items-start">
-        <BuildDialog onBuild={handleCreate}>
-            <Card className="w-[300px] h-[300px] mr-6 mb-4 group hover:border-dashed hover:border-[#024DE3] cursor-pointer">
-                <CardHeader>
-                    <CardTitle className=" flex items-center">
-                        <div className="w-6 h-6 group-hover:bg-[#024DE3] rounded-sm bg-black flex mr-6 justify-center items-center">
-                            <PlusIcon className=" w-4 h-4 text-white"/>
-                        </div>
-                        <span className="">构建新的助手</span>
-                    </CardTitle>
-                    <CardDescription className="pt-4">我们提供场景模板供您使用和参考</CardDescription>
-                </CardHeader>
-                <CardContent></CardContent>
-                <CardFooter className="pt-20 flex justify-end">
-                    <ArrowRightIcon className="w-8 h-8 group-hover:text-[#024DE3]" />
-                </CardFooter>
-            </Card>
-        </BuildDialog>
+        {open && <BuildDialog open={open} onCancel={() => setOpen(false)} onBuild={handleCreate} />}
+        <Card onClick={() => setOpen(true)} className="w-[300px] h-[300px] mr-6 mb-4 group hover:border-dashed hover:border-[#024DE3] cursor-pointer">
+            <CardHeader>
+                <CardTitle className=" flex items-center">
+                    <div className="w-6 h-6 group-hover:bg-[#024DE3] rounded-sm bg-black flex mr-6 justify-center items-center">
+                        <PlusIcon className=" w-4 h-4 text-white"/>
+                    </div>
+                    <span className="">构建新的助手</span>
+                </CardTitle>
+                <CardDescription className="pt-4">我们提供场景模板供您使用和参考</CardDescription>
+            </CardHeader>
+            <CardContent></CardContent>
+            <CardFooter className="pt-20 flex justify-end">
+                <ArrowRightIcon className="w-8 h-8 group-hover:text-[#024DE3]" />
+            </CardFooter>
+        </Card>
         {assistants.map((assistant) => (
         <Card onClick={() => handleSetting(assistant.id)} key={assistant.id} className="w-[300px] mr-6 mb-4 group hover:shadow-lg h-[300px] group cursor-pointer">
             <CardHeader>
