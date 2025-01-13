@@ -44,7 +44,7 @@ export default defineConfig({
     host: '0.0.0.0', // 同一局域网内其他服务器也可以访问
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3002',
         changeOrigin: true
       }
     }

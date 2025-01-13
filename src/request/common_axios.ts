@@ -2,7 +2,8 @@ import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
 
 const customAxios = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    // @ts-ignore
+    baseURL: __APP_ENV__.BASE_URL + '/api',
     headers: {
         'Content-Type': 'application/json',
     },

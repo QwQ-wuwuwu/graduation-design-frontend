@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast'
 import { registerApi, loginApi } from '@/request/API/user'
 import { encrypt } from '@/util/cryptoPwd'
 import { useNavigate } from 'react-router-dom'
+import { passwordRegex } from '@/util/userRegex'
 
 export default function Login() {
 
@@ -61,6 +62,12 @@ export default function Login() {
             if(okPasswordRef.current) okPasswordRef.current.value = ''
             passwordRef.current?.focus()
             return toast({ variant: 'destructive', title: '注册失败', description: '两次输入的密码不一致', duration: 2000 })
+        }
+        if(!passwordRegex(password)) {
+            if(passwordRef.current) passwordRef.current.value = ''
+            if(okPasswordRef.current) okPasswordRef.current.value = ''
+            passwordRef.current?.focus()
+            return toast({ variant: 'destructive', title: '注册失败', description: '密码必须包含大小写字母和数字', duration: 2000 })
         }
         registerApi(name, encrypt(password)).then(res => {
             if(res.data.code === 200) {

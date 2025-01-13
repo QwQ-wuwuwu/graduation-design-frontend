@@ -93,7 +93,7 @@ export default function TasksetPage() {
             <SearchInput placeholder="任务名称" onChange={(e) => handleSearch(e.target.value)} />
             <Button onClick={() => setOpen(true)} className="w-[150px]">创建任务</Button>
         </div>
-        <div className="mt-8 mb-[80px]">
+        <div className="mt-10 mb-[80px]">
             <Table>
                 <TableHeader>
                     <TableRow>
