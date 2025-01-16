@@ -84,6 +84,16 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
 
     const tokenRef = useRef('')
     const handleRadioChange = (value: string) => {
+        if(!id) {
+            if(value === 'yes') {
+                setTokenShow(true)
+                setApiObject({...apiObject, token: ' '})
+            } else {
+                setTokenShow(false)
+                setApiObject({...apiObject, token: ''})
+            }
+            return
+        }
         if(value === 'yes') {
             setTokenShow(true)
             setApiObject({...apiObject, token: tokenRef.current})
@@ -95,6 +105,16 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
 
     const api_keyRef = useRef('')
     const handleApiKeyChange = (value: string) => {
+        if(!id) {
+            if(value === 'yes') {
+                setApi_key(true)
+                setApiObject({...apiObject, api_key: ' '})
+            } else {
+                setApi_key(false)
+                setApiObject({...apiObject, api_key: ''})
+            }
+            return
+        }
         if(value === 'yes') {
             setApi_key(true)
             setApiObject({...apiObject, api_key: api_keyRef.current})
@@ -175,7 +195,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                             <Label htmlFor="r2">不携带</Label>
                         </div>
                     </RadioGroup>
-                    {tokenShow && <Input value={apiObject.token} onChange={(e) => setApiObject({...apiObject, token: e.target.value})} className="mt-2" placeholder="token"></Input>}
+                    {tokenShow && <Input value={apiObject.token} onChange={(e) => setApiObject({...apiObject, token: e.target.value.trim()})} className="mt-2" placeholder="token"></Input>}
                 </div>
                 <div className="">
                     <p className="text-gray-500">是否需要api_key</p>
@@ -189,7 +209,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                             <Label htmlFor="a2">不需要</Label>
                         </div>
                     </RadioGroup>
-                    {api_key && <Input value={apiObject.api_key} onChange={(e) => setApiObject({...apiObject, api_key: e.target.value})} className="mt-2" placeholder="api_key"></Input>}
+                    {api_key && <Input value={apiObject.api_key} onChange={(e) => setApiObject({...apiObject, api_key: e.target.value.trim()})} className="mt-2" placeholder="api_key"></Input>}
                 </div>
                 <div>
                     <p className="text-gray-500">所属模型<span className="text-[red]">*</span></p>

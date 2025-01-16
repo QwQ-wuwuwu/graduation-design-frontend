@@ -1,11 +1,7 @@
 import customAxios from "../common_axios";
 
 export const createAPI = async (data: any) => {
-    let query = ''
-    for(const key in data) {
-        query += `${key}=${data[key]}&`
-    }
-    return await customAxios.post(`/url/create?${query}`)
+    return await customAxios.post(`/url/create`, data)
 }
 
 export const getAPIList = async () => {

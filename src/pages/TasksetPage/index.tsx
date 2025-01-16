@@ -97,17 +97,19 @@ export default function TasksetPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>任务名称</TableHead>
-                        <TableHead>模型支持</TableHead>
+                        <TableHead className=" w-[100px]">任务名称</TableHead>
+                        <TableHead className="w-[150px]">模型支持</TableHead>
                         <TableHead>任务描述</TableHead>
-                        <TableHead className="text-right">操作</TableHead>
+                        <TableHead className="text-right w-[100px]">操作</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {taskList.map((task: any) => <TableRow key={task.id} >
                         <TableCell>{task.name}</TableCell>
                         <TableCell>{task.model_name}</TableCell>
-                        <TableCell>{task.description}</TableCell>
+                        <TableCell>
+                            <div className="whitespace-pre-wrap break-all text-truncate-3">{task.description}</div>
+                        </TableCell>
                         <TableCell className="text-right space-x-4">
                             <Button onClick={() => setEdit({open: true, id: task.id})} variant={'link'} className="text-blue-600 px-0">编辑</Button>
                             <Button onClick={() => setOpenDelete({...openDelete, open: true, id: task.id, name: task.name})} variant={'link'} className="text-red-500 px-0">删除</Button>

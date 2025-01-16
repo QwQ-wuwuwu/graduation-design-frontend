@@ -69,7 +69,9 @@ export default function Management() {
                 <TableBody>
                     {modelList.map((model:any) => <TableRow key={model.id}>
                         <TableCell>{model.name}</TableCell>
-                        <TableCell className="max-w-[300px]">{model.description}</TableCell>
+                        <TableCell className="max-w-[300px]">
+                            <div className=" whitespace-pre-wrap break-all text-truncate-3">{model.description}</div>
+                        </TableCell>
                         <TableCell>{model.context}</TableCell>
                         <TableCell>{model.server_from}</TableCell>
                         <TableCell>{model.max_output}</TableCell>

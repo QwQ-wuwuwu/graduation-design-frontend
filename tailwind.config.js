@@ -84,6 +84,7 @@ export default {
   plugins: [
 	require('@tailwindcss/typography'),
 	require("tailwindcss-animate"),
+	require("tailwindcss-line-clamp"),
 	plugin(({ addUtilities }) => {
 		addUtilities({
 			".scrollbar-hide": {
@@ -95,6 +96,13 @@ export default {
 				"&::-webkit-scrollbar": {
 					display: "none",
 				},
+			},
+			".text-truncate-3": {
+				display: "-webkit-box",
+				"-webkit-box-orient": "vertical",
+				"-webkit-line-clamp": "3",
+				"overflow": "hidden",
+				"text-overflow": "ellipsis",
 			},
 			".my-scrollbar": { // 
 			// 自定义滚动条样式

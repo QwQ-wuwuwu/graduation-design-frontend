@@ -1,8 +1,6 @@
+import Alert from "@/components/my-ui/Alert"
 import SearchInput from "@/components/my-ui/SearchInput"
 import { Button } from "@/components/ui/button"
-import CreateApi from "./CreateApi"
-import { getAPIList, deleteAPI } from "@/request/API/api"
-import { useCallback, useEffect, useRef, useState } from "react"
 import {
     Table,
     TableBody,
@@ -12,8 +10,10 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
-import Alert from "@/components/my-ui/Alert"
-import { debounce, set } from "lodash"
+import { deleteAPI, getAPIList } from "@/request/API/api"
+import { debounce } from "lodash"
+import { useCallback, useEffect, useRef, useState } from "react"
+import CreateApi from "./CreateApi"
 
 export default function ApiPage() {
 
@@ -79,19 +79,21 @@ export default function ApiPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>请求地址</TableHead>
-                        <TableHead>任务类型</TableHead>
-                        <TableHead>接口描述</TableHead>
-                        <TableHead>模型支持</TableHead>
-                        <TableHead>请求方法</TableHead>
-                        <TableHead className="text-right">操作</TableHead>
+                        <TableHead className="w-[300px]">请求地址</TableHead>
+                        <TableHead className="w-[100px]">任务类型</TableHead>
+                        <TableHead>接口详细说明</TableHead>
+                        <TableHead className="w-[150px]">模型支持</TableHead>
+                        <TableHead className="w-[100px]">请求方法</TableHead>
+                        <TableHead className="text-right w-[100px]">操作</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {apiList.map((api: any) => <TableRow key={api.id} >
                         <TableCell>{api.url}</TableCell>
                         <TableCell>{api.task_name}</TableCell>
-                        <TableCell>{api.description}</TableCell>
+                        <TableCell>
+                            <div className=" whitespace-pre-wrap text-truncate-3">{api.description}</div>
+                        </TableCell>
                         <TableCell>{api.model_name}</TableCell>
                         <TableCell>{api.method}</TableCell>
                         <TableCell className="text-right space-x-4">
