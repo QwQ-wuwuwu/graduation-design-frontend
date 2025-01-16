@@ -63,11 +63,11 @@ export default function CreateTask({ open, id, onCancel, onCreate, onEdit }:
             </DialogHeader>
             <div className="p-4 space-y-4">
                 <div>
-                    <Label htmlFor="i1" className="text-sm text-gray-500">任务名称<span className="text-[red]">*</span></Label>
+                    <Label htmlFor="i1" className="text-sm text-gray-500 font-bold">任务名称<span className="text-[red]">*</span></Label>
                     <Input value={task.name} onChange={e => setTask({...task, name: e.target.value})} id={'i1'} type="text" placeholder="xxx" />
                 </div>
                 <div>
-                    <Label htmlFor="i2" className="text-sm text-gray-500">模型支持<span className="text-[red]">*</span></Label>
+                    <Label htmlFor="i2" className="text-sm text-gray-500 font-bold">模型支持<span className="text-[red]">*</span></Label>
                     <Select onOpenChange={handleSelectOpen} onValueChange={(value) => setTask({...task, model_id: Number(value)})}>
                         <SelectTrigger className="">
                             <SelectValue placeholder={!id ? '选择一个支持此任务的模型' : task.model_name} defaultValue={task.model_id} />
@@ -78,7 +78,7 @@ export default function CreateTask({ open, id, onCancel, onCreate, onEdit }:
                     </Select>
                 </div>
                 <div>
-                    <Label htmlFor="i1" className="text-sm text-gray-500">任务描述</Label>
+                    <Label htmlFor="i1" className="text-sm text-gray-500 font-bold">任务描述</Label>
                     <Textarea value={task.description} onChange={e => setTask({...task, description: e.target.value})} id={'i1'} placeholder="简述任务目标，效果，适用场景等等" className=" resize-none" />
                 </div>
             </div>

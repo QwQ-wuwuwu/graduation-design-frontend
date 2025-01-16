@@ -153,22 +153,22 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
             </DialogHeader>
             <div className="space-y-4">
                 <div>
-                    <p className="text-gray-500">接口地址<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">接口地址<span className="text-[red]">*</span></p>
                     <Input placeholder="https://xxx" value={apiObject.url} onChange={e => setApiObject({...apiObject, url: e.target.value})}></Input>
                 </div>
                 <div>
-                    <p className="text-gray-500">任务类型<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">任务类型<span className="text-[red]">*</span></p>
                     <SearchSelect defaultValue={String(apiObject.task_id)} selectValue={apiObject.task_name || "请选择任务类型"} inputPlaceholder="搜索任务"
                     onOpen={handleOpen} onSearch={handleSearch} 
                     onSelect={(value) => setApiObject({...apiObject, task_id: parseInt(value)})}
                     list={taskList}/>
                 </div>
                 <div>
-                    <p className="text-gray-500">接口详细说明</p>
+                    <p className="text-gray-500 text-sm font-bold">接口详细说明</p>
                     <Textarea value={apiObject.description} onChange={e => setApiObject({...apiObject, description: e.target.value})} placeholder="使用方法，参数说明，响应情况等"></Textarea>
                 </div>
                 <div>
-                    <p className="text-gray-500">接口请求方式<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">接口请求方式<span className="text-[red]">*</span></p>
                     <Select onValueChange={(value) => setApiObject({...apiObject, method: value})}>
                         <SelectTrigger>
                             <SelectValue defaultValue={apiObject.method} placeholder={apiObject.method.toUpperCase() || '请求方式'}></SelectValue>
@@ -184,7 +184,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                     </Select>
                 </div>
                 <div className="">
-                    <p className="text-gray-500">是否携带token</p>
+                    <p className="text-gray-500 text-sm font-bold">是否携带token</p>
                     <RadioGroup value={!apiObject.token ? 'no' : 'yes'} onValueChange={handleRadioChange} className="flex space-x-4 mt-1">
                         <div className=" flex items-center space-x-1">
                             <RadioGroupItem value="yes" id="r1" />
@@ -198,7 +198,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                     {tokenShow && <Input value={apiObject.token} onChange={(e) => setApiObject({...apiObject, token: e.target.value.trim()})} className="mt-2" placeholder="token"></Input>}
                 </div>
                 <div className="">
-                    <p className="text-gray-500">是否需要api_key</p>
+                    <p className="text-gray-500 text-sm font-bold">是否需要api_key</p>
                     <RadioGroup value={apiObject.api_key ? 'yes' : 'no'} onValueChange={handleApiKeyChange} className="flex space-x-4 mt-1">
                         <div className=" flex items-center space-x-1">
                             <RadioGroupItem value="yes" id="a1" />
@@ -212,7 +212,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                     {api_key && <Input value={apiObject.api_key} onChange={(e) => setApiObject({...apiObject, api_key: e.target.value.trim()})} className="mt-2" placeholder="api_key"></Input>}
                 </div>
                 <div>
-                    <p className="text-gray-500">所属模型<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">所属模型<span className="text-[red]">*</span></p>
                     <Select onValueChange={(value) => setApiObject({...apiObject, model_id: parseInt(value)})} onOpenChange={handleModelOpen}>
                         <SelectTrigger>
                             <SelectValue defaultValue={apiObject.model_id} placeholder={apiObject.model_name || '模型名称'}></SelectValue>

@@ -77,23 +77,23 @@ function EditModel({ children, id, onCreate, onUpdate }:
             </DialogHeader>
             <div className="space-y-4">
                 <div>
-                    <p className="text-gray-500">模型名称<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">模型名称<span className="text-[red]">*</span></p>
                     <Input placeholder="xxx" value={model.name} onChange={(e) => setModel({...model, name: e.target.value})} />
                 </div>
                 <div>
-                    <p className="text-gray-500">模型详情</p>
+                    <p className="text-gray-500 text-sm font-bold">模型详情</p>
                     <Textarea placeholder="描述模型优势，使用场景等" value={model.description} onChange={(e) => setModel({...model, description: e.target.value})} className=" resize-none" />
                 </div>
                 <div>
-                    <p className="text-gray-500">服务提供方<span className="text-[red]">*</span></p>
+                    <p className="text-gray-500 text-sm font-bold">服务提供方<span className="text-[red]">*</span></p>
                     <Input placeholder="该模型由谁提供服务支持" value={model.server_from} onChange={(e) => setModel({...model, server_from: e.target.value})} className=" resize-none" />
                 </div>
                 <div>
-                    <p className="text-gray-500">上下文大小</p>
+                    <p className="text-gray-500 text-sm font-bold">上下文大小</p>
                     <Input value={model.context} placeholder="例如：120k" onChange={e => setModel({...model, context: e.target.value})} />
                 </div>
                 <div>
-                    <p className="text-gray-500">最大输出</p>
+                    <p className="text-gray-500 text-sm font-bold">最大输出</p>
                     <Input placeholder="例如：4k" value={model.max_output} onChange={e => setModel({...model, max_output: e.target.value})} />
                 </div>
             </div>
