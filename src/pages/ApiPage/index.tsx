@@ -13,10 +13,12 @@ import { toast } from "@/hooks/use-toast"
 import { deleteAPI, getAPIList } from "@/request/API/api"
 import { debounce } from "lodash"
 import { useCallback, useEffect, useRef, useState } from "react"
+import Loading from "../Loading"
 import CreateApi from "./CreateApi"
 
 export default function ApiPage() {
 
+    const [loading, setLoading] = useState(false)
     const [apiList, setApiList] = useState([])
     const deleteInit = {
         open: false,
@@ -37,6 +39,7 @@ export default function ApiPage() {
         const { data: { data } } = await getAPIList()
         setApiList(data)
         apiListRef.current = data
+        setLoading(true)
     }, [])
 
     useEffect(() => {
@@ -75,24 +78,24 @@ export default function ApiPage() {
             <SearchInput onChange={(e) => handleApiSearch(e.target.value)} placeholder="搜索任务类型" />
             <Button onClick={() => setCreateOpen(true)} className="w-[150px]">创建接口地址</Button>
         </div>
-        <div className="mt-10 mb-[80px]">
+        {loading ? <div className="mt-10 mb-[80px] w-full">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[300px]">请求地址</TableHead>
-                        <TableHead className="w-[100px]">任务类型</TableHead>
-                        <TableHead>接口详细说明</TableHead>
-                        <TableHead className="w-[150px]">模型支持</TableHead>
-                        <TableHead className="w-[100px]">请求方法</TableHead>
+                        <TableHead className="">请求地址</TableHead>
+                        <TableHead className="w-[150px]">任务类型</TableHead>
+                        <TableHead className="">接口详细说明</TableHead>
+                        <TableHead className="">模型支持</TableHead>
+                        <TableHead className="w-[80px]">请求方法</TableHead>
                         <TableHead className="text-right w-[100px]">操作</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {apiList.map((api: any) => <TableRow key={api.id} >
-                        <TableCell>{api.url}</TableCell>
+                        <TableCell className="max-w-[300px] overflow-hidden text-ellipsis">{api.url}</TableCell>
                         <TableCell>{api.task_name}</TableCell>
                         <TableCell>
-                            <div className=" whitespace-pre-wrap text-truncate-3">{api.description}</div>
+                            <div className="max-w-[700px] whitespace-pre-wrap break-all text-truncate-3">{api.description}</div>
                         </TableCell>
                         <TableCell>{api.model_name}</TableCell>
                         <TableCell>{api.method}</TableCell>
@@ -103,7 +106,9 @@ export default function ApiPage() {
                     </TableRow>)}
                 </TableBody>
             </Table>
-        </div>
+        </div> : <div className="w-full h-full flex justify-center items-center">
+            <Loading />
+        </div>}
         <div className=" fixed bottom-0 z-10 bg-white w-full h-16 flex items-center">
             <p className="text-sm text-gray-500">接口集合. </p>
         </div>

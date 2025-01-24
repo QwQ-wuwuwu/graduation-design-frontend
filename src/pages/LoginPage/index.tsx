@@ -37,7 +37,9 @@ export default function Login() {
             if(data.code === 400) return toast({ variant: 'destructive', title: '登录失败', description: data.message, duration: 2000 })
             data.token && sessionStorage.setItem('token', data.token)
             sessionStorage.setItem('user', JSON.stringify(data.data))
+            console.log(sessionStorage.getItem('token'))
             navigate('/layout/chat')
+            console.log('已路由到会话界面')
         })
     }
 

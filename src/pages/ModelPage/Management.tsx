@@ -13,14 +13,17 @@ import { getModelList, deleteModelById } from "@/request/API/model"
 import { throttle } from 'lodash'
 import { useToast } from "@/hooks/use-toast"
 import Alert from "@/components/my-ui/Alert"
+import Loading from "../Loading"
 
 export default function Management() {
 
     const getData = async () => {
         getModelList().then(res => {
             setModelList(res.data.data)
+            setLoading(true)
         })
     }
+    const [loading, setLoading] = useState(false)
     const [modelList, setModelList] = useState([])
     const { toast } = useToast()
     const initial = {
@@ -55,7 +58,7 @@ export default function Management() {
             <Button className="bg-black" onClick={refresh}>刷新</Button>
         </div>
         <div className="w-full h-[calc(100%-48px-64px)] overflow-y-auto my-scrollbar">
-            <Table>
+            {loading ? <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>模型名称</TableHead>
@@ -83,7 +86,7 @@ export default function Management() {
                         </TableCell>
                     </TableRow>)}
                 </TableBody>
-            </Table>
+            </Table> : <Loading />}
         </div>
         <div className="w-full h-16 flex items-center">
             <p className="text-sm text-gray-500">模型集合. </p>

@@ -104,6 +104,11 @@ export default {
 				"overflow": "hidden",
 				"text-overflow": "ellipsis",
 			},
+			".text-trruncate": {
+				display: "-webkit-box",
+				"overflow": "hidden",
+				"text-overflow": "ellipsis",
+			},
 			".my-scrollbar": { // 
 			// 自定义滚动条样式
 				"&::-webkit-scrollbar": {

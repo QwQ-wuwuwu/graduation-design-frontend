@@ -1,50 +1,9 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 工程化
+1. vite配置开发环境下代理，别名导入路径，全局自定义变量
+2. nginx配置生产环境下代理到后端服务器
+3. vite配置gzip打包压缩，启用esbuild树摇，压缩代码，同时nginx也配置支持gzip压缩解读。注：如果要使用brotli打包压缩，nginx必须要导入brotli压缩模块或者使用支持brotli的nginx镜像。
+4. 基于docker部署，为避免多次相同操作部署，利用.sh脚本快速部署
+5. 基于performance实现监控各个页面的网络请求，最大内容，DOM渲染等加载时间
+## 技术
+1. 基于react-window的虚拟列表以及前端假分页，实现渲染优化。对于不定高场景下的虚拟列表，先实际渲染数据项一次，记录下数据项高度，此时再动态计算数据项最终渲染的高度，并动态更新视区高度。
+2. 大文件支持断点续传，分片上传，多文件上传进度展示，续传判断是否同源

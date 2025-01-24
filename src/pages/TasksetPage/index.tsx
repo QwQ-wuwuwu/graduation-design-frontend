@@ -10,14 +10,19 @@ import {
 } from "@/components/ui/table"
 import { toast } from "@/hooks/use-toast"
 import { createTask, deleteTaskById, getTaskList, searchByName, updateTaskById } from "@/request/API/task"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import CreateTask from "./CreateTask"
 import Alert from "@/components/my-ui/Alert"
 import { debounce } from "lodash"
+import Loading from "../Loading"
 
 export default function TasksetPage() {
 
+    const bottomRef = useRef<HTMLDivElement>(null)
+    const scorllareaRef = useRef<HTMLDivElement>(null)
+    const [page, setPage] = useState(0)
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
     const editInit = {
         open: false,
         id: -1
@@ -32,13 +37,36 @@ export default function TasksetPage() {
     }
     const [openDelete, setOpenDelete] = useState(deleteInit)
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         const { data: { data } } = await getTaskList()
         setTaskList(data)
-    }
+        setLoading(true)
+    }, [])
+
+    const pageData = useMemo(() => {
+        return taskList.slice(0, page * 11)
+    }, [page, taskList])
 
     useEffect(() => {
         getData()
+    }, [])
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if(entry.isIntersecting) {
+                setPage(page => page + 1)
+            }
+        }, {
+            root: scorllareaRef.current,
+            rootMargin: '0px',
+            threshold: 1.0
+        })
+        if(bottomRef.current) {
+            observer.observe(bottomRef.current)
+        }
+        return () => {
+            observer.disconnect()
+        }
     }, [])
 
     const handleCreate = async (task: any) => {
@@ -88,12 +116,12 @@ export default function TasksetPage() {
         setTaskList(data)
     }, 300), [])
 
-    return <div className="w-full h-full overflow-y-auto my-scrollbar p-2">
+    return <div ref={scorllareaRef} className="w-full h-full overflow-y-auto my-scrollbar p-2">
         <div className=" fixed right-4 z-10 h-12 flex items-center space-x-4 justify-end">
             <SearchInput placeholder="任务名称" onChange={(e) => handleSearch(e.target.value)} />
             <Button onClick={() => setOpen(true)} className="w-[150px]">创建任务</Button>
         </div>
-        <div className="mt-10 mb-[80px]">
+        {loading ? <div className="mt-10 mb-[80px]">
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -104,7 +132,7 @@ export default function TasksetPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {taskList.map((task: any) => <TableRow key={task.id} >
+                    {pageData.map((task: any) => <TableRow key={task.id} >
                         <TableCell>{task.name}</TableCell>
                         <TableCell>{task.model_name}</TableCell>
                         <TableCell>
@@ -117,7 +145,10 @@ export default function TasksetPage() {
                     </TableRow>)}
                 </TableBody>
             </Table>
-        </div>
+        </div> : <div className="w-full h-full flex justify-center items-center">
+            <Loading />    
+        </div>}
+        <div ref={bottomRef}></div>
         <div className=" fixed bottom-0 z-10 bg-white w-full h-16 flex items-center">
             <p className="text-sm text-gray-500">任务集合. </p>
         </div>

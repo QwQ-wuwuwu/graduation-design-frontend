@@ -12,7 +12,7 @@ const UserPage = lazy(() => import('@/pages/UserPage/index'))
 const UserIfonPage = lazy(() => import('@/pages/UserPage/UserIfonPage'))
 const ThemePage = lazy(() => import('@/pages/UserPage/ThemePage'))
 const BuildPage = lazy(() => import('@/pages/BuildPage/index'))
-const BuildAssistant = lazy(() => import('@/pages/BuildPage/BuildAssistant'))
+const BuildAssistant = lazy(() => import('@/pages/BuildPage/BuildAssisFlow'))
 const KnowledgePage = lazy(() => import('@/pages/KnowledgePage/index'))
 const DatasetPage = lazy(() => import('@/pages/DatasetPage'))
 const TasksetPage = lazy(() => import('@/pages/TasksetPage'))
@@ -22,8 +22,10 @@ const ApiPage = lazy(() => import('@/pages/ApiPage'))
 const ModelPage = lazy(() => import('@/pages/ModelPage'))
 const Mangagement = lazy(() => import('@/pages/ModelPage/Management'))
 const Finetune = lazy(() => import('@/pages/ModelPage/Finetune'))
+const DocKnowDetail = lazy(() => import('@/pages/KnowledgePage/component/DocKnowDetail'))
+const QAKnowDetail = lazy(() => import('@/pages/KnowledgePage/component/QAKnowDetail'))
 
-export const routes:MyRoute[] = [
+export const routes: MyRoute[] = [
     { path: '/', element: <Login /> },
     { path: '/layout', element: <GuardRouter><Layout /></GuardRouter>, meta: ['admin', 'user'], children: [
         { path: '', element: <ChatPage />, meta: ['admin', 'user'] },
@@ -38,6 +40,8 @@ export const routes:MyRoute[] = [
             { path: '', element: <DocKnowledge />, meta: ['admin', 'user'] },
             { path: 'doc', element: <DocKnowledge />, meta: ['admin', 'user'] },
             { path: 'qa', element: <QAKnowledge />, meta: ['admin', 'user'] },
+            { path: 'doclib', element: <DocKnowDetail />, meta: ['admin', 'user'] },
+            { path: 'qalib', element: <QAKnowDetail />, meta: ['admin', 'user'] },
         ] },
         { path: 'preset', element: <BuildPage />, meta: ['admin'] },
         { path: 'dataset', element: <DatasetPage />, meta: ['admin'] },

@@ -5,6 +5,12 @@ export interface MyRoute {
     children?: MyRoute[]
 }
 export interface User {
+    id: number,
     name: string,
-    role: number
+    role: number,
+    menu?: string[],
+    password?: string,
+    role_name?: string,
+    insert_time?: string,
+    update_time?: string
 }
