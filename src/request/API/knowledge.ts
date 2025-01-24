@@ -65,7 +65,7 @@ export const uploadAllFiles = async (fileList: File[], onProgress: (progresses: 
                     onProgress(progresses)
                 }
             },
-            timeout: 1000
+            timeout: 1000 * 10
         })
         requests.push(request)
     })
