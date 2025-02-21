@@ -12,7 +12,7 @@ export default defineConfig({
     viteCompression({
       verbose:true, // 显示压缩详情
       disable: false, 
-      threshold: 1024, // 大于1kb的文件会被压缩
+      threshold: 50 * 1024, // 大于50kb的文件会被压缩
       algorithm: 'gzip', // 使用gzip压缩
       ext: '.gz', 
     })
@@ -49,9 +49,13 @@ export default defineConfig({
       }
     }
   },
+  esbuild: {
+    // drop: ['console', 'debugger'], // 去除console和debugger
+  },
   server: {
     port: 3001,
     host: '0.0.0.0', // 同一局域网内其他服务器也可以访问
+    open: true,
     proxy: {
       '/api': {
         target: 'http://localhost:3002',

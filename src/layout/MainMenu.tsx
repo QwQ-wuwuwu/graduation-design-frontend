@@ -7,7 +7,7 @@ import DatasetIcon from "@/components/icons/dataset"
 import SystemIcon from "@/components/icons/system"
 import EvaluationIcon from "@/components/icons/evaluation"
 import PresetIcon from "@/components/icons/preset"
-import TaskIcon from "@/components/icons/task"
+// import TaskIcon from "@/components/icons/task"
 import InterfaceIcon from "@/components/icons/interface"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import { BookOpenIcon } from "lucide-react"
@@ -49,9 +49,9 @@ export default function MainMenu() {
                 {user.role === 0 && <NavLinkButton to="/layout/dataset" value="数据集">
                     <DatasetIcon className='w-8 h-8'/>
                 </NavLinkButton>}
-                {user.role === 0 && <NavLinkButton to="/layout/taskset" value="任务" textClass="tracking-[14px]">
+                {/* {user.role === 0 && <NavLinkButton to="/layout/taskset" value="任务" textClass="tracking-[14px]">
                     <TaskIcon className='w-8 h-8 p-[2px]'/>
-                </NavLinkButton>}
+                </NavLinkButton>} */}
                 <NavLinkButton to="/layout/evaluation" value="评测" textClass="tracking-[14px]">
                     <EvaluationIcon className='w-8 h-8'/>
                 </NavLinkButton>

@@ -14,6 +14,7 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom"
 import { EditIcon } from "lucide-react"
 import DropFile from "@/components/my-ui/DropFile"
+import { deepseekTest } from "@/request/API/knowledge"
 
 export default function KnowledgePage() {
 
@@ -41,6 +42,10 @@ export default function KnowledgePage() {
     const handleQACreate = async () => {
         loadQAList()
         setQAOpen(false)
+    }
+
+    const handleTest = async () => {
+        await deepseekTest()
     }
 
     const Header = useMemo(() => {
@@ -78,6 +83,7 @@ export default function KnowledgePage() {
         return <div className=" w-full h-12 flex justify-end space-x-4 items-center">
             <SearchInput placeholder="知识库名称" />
             <Button onClick={handleCreate} className="w-[150px]">创建知识库</Button>
+            <Button onClick={handleTest}>test</Button>
         </div>
     }, [location.pathname, knowledge])
 

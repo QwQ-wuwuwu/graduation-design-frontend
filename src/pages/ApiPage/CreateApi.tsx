@@ -1,4 +1,4 @@
-import SearchSelect from "@/components/my-ui/SearchSelect"
+// import SearchSelect from "@/components/my-ui/SearchSelect"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -16,9 +16,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
 import { createAPI, getAPIById, updateAPI } from "@/request/API/api"
 import { getModelList } from "@/request/API/model"
-import { getTaskList } from "@/request/API/task"
-import { debounce } from "lodash"
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react"
+// import { getTaskList } from "@/request/API/task"
+// import { debounce } from "lodash"
+import { useEffect, useRef, useState } from "react"
 
 export default function CreateApi({ open, id, onConfirm, onCancel }: 
     { open: boolean,
@@ -33,6 +33,7 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
         url: '',
         task_id: -1,
         task_name: '',
+        task_desc: '',
         description: '',
         method: '',
         token: '',
@@ -74,8 +75,8 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
 
     const handleEdit = async () => {
         console.log(apiObject)
-        const { model_id, url, task_id, method } = apiObject
-        if(model_id === -1 || !url || !task_id || !method) return toast({title: '更新失败', description: '请填写完整信息', variant: 'destructive', duration: 2000})
+        const { model_id, url, task_name, method } = apiObject
+        if(model_id === -1 || !url || !task_name || !method) return toast({title: '更新失败', description: '请填写完整信息', variant: 'destructive', duration: 2000})
         const { data: { code } } = await updateAPI(id as number, apiObject)
         if(code !== 200) return toast({title: '更新失败', description: '更新接口失败，请稍后再试', variant: 'destructive', duration: 2000})
         onConfirm()
@@ -124,20 +125,20 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
         }
     }
 
-    const [taskList, setTaskList] = useState([])
-    const taskListRef = useRef([])
-    const handleOpen = async () => {
-        const { data: { data } } = await getTaskList()
-        setTaskList(data)
-        taskListRef.current = data
-    }
+    // const [taskList, setTaskList] = useState([])
+    // const taskListRef = useRef([])
+    // const handleOpen = async () => {
+    //     const { data: { data } } = await getTaskList()
+    //     setTaskList(data)
+    //     taskListRef.current = data
+    // }
 
-    const handleSearch = useCallback(debounce((e: ChangeEvent<HTMLInputElement>) => {
-        const keyWord = e.target.value.trim()
-        if(!keyWord) return setTaskList(taskListRef.current)
-        const list = taskListRef.current.filter((item:any) => item.name.toUpperCase().includes(keyWord.toUpperCase()))
-        setTaskList(list)
-    }, 300), [])
+    // const handleSearch = useCallback(debounce((e: ChangeEvent<HTMLInputElement>) => {
+    //     const keyWord = e.target.value.trim()
+    //     if(!keyWord) return setTaskList(taskListRef.current)
+    //     const list = taskListRef.current.filter((item:any) => item.name.toUpperCase().includes(keyWord.toUpperCase()))
+    //     setTaskList(list)
+    // }, 300), [])
 
     const [modelList, setModelList] = useState([])
     const handleModelOpen = async () => {
@@ -157,15 +158,20 @@ export default function CreateApi({ open, id, onConfirm, onCancel }:
                     <Input placeholder="https://xxx" value={apiObject.url} onChange={e => setApiObject({...apiObject, url: e.target.value})}></Input>
                 </div>
                 <div>
-                    <p className="text-gray-500 text-sm font-bold">任务类型<span className="text-[red]">*</span></p>
-                    <SearchSelect defaultValue={String(apiObject.task_id)} selectValue={apiObject.task_name || "请选择任务类型"} inputPlaceholder="搜索任务"
-                    onOpen={handleOpen} onSearch={handleSearch} 
-                    onSelect={(value) => setApiObject({...apiObject, task_id: parseInt(value)})}
-                    list={taskList}/>
-                </div>
-                <div>
                     <p className="text-gray-500 text-sm font-bold">接口详细说明</p>
                     <Textarea value={apiObject.description} onChange={e => setApiObject({...apiObject, description: e.target.value})} placeholder="使用方法，参数说明，响应情况等"></Textarea>
+                </div>
+                <div>
+                    <p className="text-gray-500 text-sm font-bold">接口任务<span className="text-[red]">*</span></p>
+                    {/* <SearchSelect defaultValue={String(apiObject.task_id)} selectValue={apiObject.task_name || "请选择任务类型"} inputPlaceholder="搜索任务"
+                    onOpen={handleOpen} onSearch={handleSearch} 
+                    onSelect={(value) => setApiObject({...apiObject, task_id: parseInt(value)})}
+                    list={taskList}/> */}
+                    <Input placeholder="例如：角色扮演" value={apiObject.task_name} onChange={e => setApiObject({...apiObject, task_name: e.target.value})}></Input>
+                </div>
+                <div>
+                    <p className="text-gray-500 text-sm font-bold">任务说明</p>
+                    <Textarea value={apiObject.task_desc} onChange={e => setApiObject({...apiObject, task_desc: e.target.value})} placeholder="任务用途，使用场景等"></Textarea>
                 </div>
                 <div>
                     <p className="text-gray-500 text-sm font-bold">接口请求方式<span className="text-[red]">*</span></p>

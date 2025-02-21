@@ -61,13 +61,28 @@ export const uploadAllFiles = async (fileList: File[], onProgress: (progresses: 
             },
             onUploadProgress: (progressEvent: any) => {
                 if(progressEvent.lengthComputable) {
-                    progresses[index] = Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    progresses[index] = Math.round((progressEvent.loaded / progressEvent.total) * 100 - 10)
                     onProgress(progresses)
                 }
             },
             timeout: 1000 * 10
         })
+        request.then(() => {
+            progresses[index] = 100
+            onProgress(progresses)
+        })
         requests.push(request)
     })
     return await Promise.all(requests)
+}
+
+export const deepseekTest = async () => {
+    return await customAxios.post(`http://localhost:11434/api/generate`,{
+        "model": "deepseek-r1:7b",
+        "prompt": "为什么天空是蓝色的? Respond using JSON",
+        "format": "json",
+        "stream": false
+    }, {
+        timeout: 100 * 1000
+    })
 }

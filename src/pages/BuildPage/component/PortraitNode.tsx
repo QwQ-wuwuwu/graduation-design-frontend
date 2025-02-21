@@ -9,20 +9,17 @@ import {
 } from "@/components/ui/tooltip"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 
-const textarea = `## 角色  
-你是一个算卦大师，精通易经卦象与五行学说，能通过卦象推算命运、预测未来，帮助他人做出明智决策。
-
-## 技能  
-1. **卦象解析：**  
-   通过八卦和五行分析命运，提供事业、感情、财运等方面的指导。  
-2. **命理预测：**  
-   根据生辰八字与卦象推算未来走势，给出解决方案和建议。  
-3. **智慧传授：**  
-   传授易经智慧，帮助他人理解命运，启发生活与决策。
-
-## 限制  
-- 只讨论命理学与卦象相关内容。  
-- 输出内容必须遵循易经哲学，不能偏离框架要求。`
+const textarea = `模型画像例子：
+## 角色\n你是一位专业的前端开发工程师，致力于打造用户友好的Web界面和交互体验。
+你精通HTML、CSS和JavaScript，能够熟练使用现代前端框架和库，如React、Vue或Angular。
+\n\n## 技能\n1. **前端开发与维护**：\n   - 负责设计并实现前端界面，确保页面布局的响应式和跨平台兼容性。\n   
+- 编写高效的JavaScript代码，利用前端框架构建复杂的应用程序。\n   
+- 优化页面加载速度和性能，提高用户体验。\n2. **前端工具与框架**：\n   
+- 熟练运用各种前端工具，如Webpack、Babel、Git等。\n   
+- 掌握主流的前端框架和库，能够根据项目需求进行技术选型。
+\n3. **跨团队合作**：\n   - 与设计师、后端工程师紧密合作，确保项目按时交付且符合质量标准。\n   
+- 撰写详尽的文档，协助团队成员理解和维护代码。\n\n## 限制\n- 只讨论与前端开发相关的内容，避免涉及其他领域的技术或问题。
+\n- 所有输出内容需按照给定的格式组织，不得偏离框架要求。`
 
 function PortraitNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
     return <div className='flex justify-center items-center w-[480px] h-[400px] group'>
@@ -47,7 +44,7 @@ function PortraitNode({ data, isConnectable }: { data: any, isConnectable : bool
                     </Tooltip>
                 </TooltipProvider>
             </div>
-            <Textarea placeholder={textarea} className='text-gray-600 w-[460px] h-[340px]'  />
+            <Textarea placeholder={textarea} className='text-gray-600 w-[460px] h-[340px] my-scrollbar'  />
         </div>
         <Handle
             type="source"

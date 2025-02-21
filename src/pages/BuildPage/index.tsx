@@ -30,19 +30,44 @@ import useIndexViewBuildStore from "@/hooks/indexViewBuild"
 import { getRandomColor } from "@/util/randomColor"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { ChromePicker } from 'react-color'
+
+const assistantInit = {
+    name: '',
+    description: '',
+    avatar: ''
+}
+
+interface Assistant {
+    name: string,
+    description: string,
+    avatar: string
+}
 
 function BuildDialog({ open, onCancel, onBuild }: 
     { 
         open: boolean,
         onCancel: () => void,
-        onBuild: () => void 
+        onBuild: (assistant: Assistant) => void 
     }) {
 
-    const handleCreate = () => {
-        onBuild()
+    const [assistant, setAssistants] = useState(assistantInit)
+    const randomColor = getRandomColor()
+    const [color, setColor] = useState(randomColor)
+
+    const handleColor = (color: any) => {
+        setColor(color.hex)
+        console.log(color.hex)
     }
     
-    return <Dialog open={open} onOpenChange={onCancel}>
+    return <Dialog open={open} onOpenChange={onCancel} modal={false}>
+        {/* 全局蒙版，因为model=false */}
+        {open && <div className=" fixed top-0 left-0 z-50 w-full h-full bg-black/80"></div>}
         <DialogContent className="max-w-[625px]">
             <DialogHeader className="mb-2">
                 <DialogTitle>构建助手</DialogTitle>
@@ -51,28 +76,41 @@ function BuildDialog({ open, onCancel, onBuild }:
             <div className="space-y-6">
                 <div className="space-y-2">
                     <Label htmlFor="a1"><p>助手头像</p></Label>
-                    <div id="a1" className={`w-8 h-8 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: getRandomColor() }}>
-                        <RobotIcon className="w-7 h-7 text-[white]" />
-                    </div>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <div id="a1" className={`w-8 h-8 cursor-pointer rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: color }}>
+                                <RobotIcon className="w-7 h-7 text-[white]" />
+                            </div>
+                        </PopoverTrigger> 
+                        <PopoverContent side="right" className="w-[300p]">
+                            <ChromePicker color={color} onChangeComplete={handleColor} disableAlpha={true} className="m-auto" />
+                        </PopoverContent> 
+                    </Popover>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="a2"><p>助手名称 <span className="text-[red]">*</span></p></Label>
-                    <Input id="a2" placeholder="给助手起个名字" />
+                    <Input onChange={e => setAssistants({ ...assistant, name: e.target.value })} id="a2" placeholder="给助手起个名字" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="a3"><p>你希望助手的角色是什么，具体完成什么任务？<span className="text-[red]">*</span></p></Label>
-                    <Textarea id="a3" placeholder="输入您的想法" className=" resize-none h-24" />
+                    <Textarea id="a3" onChange={(e) => setAssistants({ ...assistant, description: e.target.value })}
+                    placeholder="例如：你是xxx，你的任务是xxx，拥有xxx方面丰富的知识和经验，能帮助我解决问题" 
+                    className=" resize-none h-24" />
                 </div>
             </div>
             <DialogFooter>
                 <DialogClose className="space-x-4">
                     <Button onClick={onCancel} className="w-[100px]" variant={'outline'}>取消</Button>
-                    <Button className="w-[100px]" onClick={handleCreate}>创建</Button>
+                    <Button className="w-[100px]" onClick={() => onBuild(assistant)}>创建</Button>
                 </DialogClose>
             </DialogFooter>
         </DialogContent>
     </Dialog>
 }
+
+import { getPortrait } from "@/request/model_api/portrait"
+import Loading from "../Loading"
+import { createAssistant } from "@/request/API/assistant"
 
 export default function BuildPage() {
 
@@ -104,8 +142,13 @@ export default function BuildPage() {
         }
     }, [])
 
-    const handleCreate = () => {
+    const [creating, setCreating] = useState(false)
+    const handleCreate = async (data: Assistant) => {
         setOpen(false)
+        setCreating(true)
+        // await getPortrait(data.description)
+        // await createAssistant(data)
+        setCreating(false)
         setAssistants([])
         navigate(`/layout/assistant`)
     }
@@ -122,7 +165,8 @@ export default function BuildPage() {
 
     }
 
-    return <div className="w-full max-h-[100%] overflow-y-auto my-scrollbar flex pt-10 pl-[100px] pb-16 flex-wrap items-start">
+    return <>
+    {!creating ? <div className="w-full max-h-[100%] overflow-y-auto my-scrollbar flex pt-10 pl-[100px] pb-16 flex-wrap items-start">
         {open && <BuildDialog open={open} onCancel={() => setOpen(false)} onBuild={handleCreate} />}
         <Card onClick={() => setOpen(true)} className="w-[300px] h-[300px] mr-6 mb-4 group hover:border-dashed hover:border-[#024DE3] cursor-pointer">
             <CardHeader>
@@ -169,5 +213,6 @@ export default function BuildPage() {
         <div className=" fixed bottom-0 z-10 bg-white w-full h-16 ml-[-90px] flex items-center">
             <p className="text-sm text-gray-500">在此页面管理您的助手，对助手上线，下线，编辑等操作. </p>
         </div>
-    </div>
+    </div> : <Loading text="助手创建中..." />}
+    </>
 }

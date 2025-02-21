@@ -83,8 +83,9 @@ export default function ApiPage() {
                 <TableHeader>
                     <TableRow>
                         <TableHead className="">请求地址</TableHead>
-                        <TableHead className="w-[150px]">任务类型</TableHead>
-                        <TableHead className="">接口详细说明</TableHead>
+                        <TableHead className="">接口说明</TableHead>
+                        <TableHead className="">接口任务</TableHead>
+                        <TableHead className="">任务说明</TableHead>
                         <TableHead className="">模型支持</TableHead>
                         <TableHead className="w-[80px]">请求方法</TableHead>
                         <TableHead className="text-right w-[100px]">操作</TableHead>
@@ -92,10 +93,13 @@ export default function ApiPage() {
                 </TableHeader>
                 <TableBody>
                     {apiList.map((api: any) => <TableRow key={api.id} >
-                        <TableCell className="max-w-[300px] overflow-hidden text-ellipsis">{api.url}</TableCell>
+                        <TableCell className="max-w-[250px] overflow-hidden text-ellipsis">{api.url}</TableCell>
+                        <TableCell>
+                            <div className="max-w-[600px] whitespace-pre-wrap break-all text-truncate-3">{api.description}</div>
+                        </TableCell>
                         <TableCell>{api.task_name}</TableCell>
                         <TableCell>
-                            <div className="max-w-[700px] whitespace-pre-wrap break-all text-truncate-3">{api.description}</div>
+                            <div className="max-w-[600px] whitespace-pre-wrap break-all text-truncate-3">{api.task_desc}</div>
                         </TableCell>
                         <TableCell>{api.model_name}</TableCell>
                         <TableCell>{api.method}</TableCell>
@@ -116,6 +120,7 @@ export default function ApiPage() {
         onCancel={() => setOpenDelete(deleteInit)}
         onConfirm={() => handleDelete(openDelete.id)}/>
         <CreateApi open={createOpen} onConfirm={handleCreate} onCancel={() => setCreateOpen(false)} />
-        <CreateApi open={editOpen.open} id={editOpen.id} onConfirm={() => setEditOpen(editInit)} onCancel={() => setEditOpen(editInit)} />
+        <CreateApi open={editOpen.open} id={editOpen.id} onConfirm={() => {setEditOpen(editInit); getData()}} 
+        onCancel={() => setEditOpen(editInit)} />
     </div>
 }
