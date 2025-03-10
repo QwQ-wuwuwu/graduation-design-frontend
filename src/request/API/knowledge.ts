@@ -10,17 +10,15 @@ export const createQAKnowledge = async (data: any) => {
 
 export const getDocKnowledgeList = async (user_id: number) => {
     return await customAxios.get(`/knowledge/list?type=0&user_id=${user_id}`, {
-        headers: {
-            'Cache-Control': 'no-cache no-store'
-        }
     })
+}
+
+export const getList = async () => {
+    return await customAxios.get('/knowledge/slist')
 }
 
 export const getQAKnowledgeList = async (user_id: number) => {
     return await customAxios.get(`/knowledge/list?type=1&user_id=${user_id}`, {
-        headers: {
-            'Cache-Control': 'no-cache no-store'
-        }
     })
 }
 

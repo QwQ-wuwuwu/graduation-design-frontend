@@ -22,6 +22,7 @@ import ModelConfigNode from './component/ModelConfigNode';
 import KnowledgeNode from './component/KnowledgeNode';
 import GuidNode from './component/GuidNode';
 import ModelNode from './component/ModelNode';
+import { useAssistant } from '@/store/flowNode';
 
 const nodeTypes = { 
     assistantNode: AssistantNode,
@@ -56,8 +57,10 @@ export default function BuildAssisFlow() {
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const navigate = useNavigate()
     const setOnline = useAssisOnlineStore((state:any) => state.setOnline)
+    const assistant = useAssistant((state: any) => state.assistant)
 
     const handleOnline = () => {
+        console.log(assistant)
         setNodes([])
         navigate('/layout/chat')
         setOnline(0) // 测试用

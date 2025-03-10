@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo, useState } from "react"
 import { Handle, Position } from "@xyflow/react"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
@@ -10,10 +10,23 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useModelTask } from "@/store/flowNode"
+import { getTasks, getTaskByModel } from "@/request/API/api"
 
 function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
-    const tasks = [{id:1, name:'任务1'},{id:2, name:'任务2'},{id:3, name:'任务3'}]
+    const [tasks, setTasks] = useState([])
+    const modelId: number = useModelTask((state: any) => state.modelId);
+
+    const handleSearchSelectOpen = async () => {
+        if(modelId === -1) {
+            const { data: { data } } = await getTasks()
+            setTasks(data.map((d: any) => ({...d, name: d.task_name})))
+        } else {
+            const { data: { data } } = await getTaskByModel(modelId)
+            setTasks(data.map((d: any) => ({...d, name: d.task_name})))
+        }
+    }
 
     return <div className='flex justify-center items-center w-[400px] h-[300px] group'>
         <Handle
@@ -29,7 +42,12 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
             </div>
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">核心任务</p>
-                <SearchSelect selectValue="选择助手核心任务" list={tasks} onSelect={() => console.log('')} />
+                <SearchSelect 
+                    selectValue="选择助手核心任务" 
+                    onOpen={handleSearchSelectOpen} 
+                    list={tasks} 
+                    onSelect={() => console.log('')} 
+                />
             </div>
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">温度</p>

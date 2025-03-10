@@ -22,3 +22,11 @@ export const updateAPI = async (id: number, data: any) => {
         ...data
     })
 }
+
+export const getTasks = async () => {
+    return await customAxios.get(`/url/tasks`);
+}
+
+export const getTaskByModel = async (id: number) => {
+    return await customAxios.get(`/url/task?id=${id}`)
+}
