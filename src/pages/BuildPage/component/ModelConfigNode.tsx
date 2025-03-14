@@ -10,13 +10,16 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useModelTask } from "@/store/flowNode"
+import { useAssistant, useModelTask } from "@/store/flowNode"
 import { getTasks, getTaskByModel } from "@/request/API/api"
 
 function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
     const [tasks, setTasks] = useState([])
     const modelId: number = useModelTask((state: any) => state.modelId);
+    const { assistant, setAssistant} = useAssistant()
+    const [ temperature, setTemperature ] = useState(95)
+    const [ maxToken, setMaxToken ] = useState(3200)
 
     const handleSearchSelectOpen = async () => {
         if(modelId === -1) {
@@ -27,6 +30,15 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
             setTasks(data.map((d: any) => ({...d, name: d.task_name})))
         }
     }
+
+    const handleTaskSelect = (value: string) => setAssistant({ ...assistant, api_id: parseInt(value) })
+
+    const handleMaxTokenInput = (e: any) => {
+        setMaxToken(e.target.value)
+        setAssistant({ ...assistant, max_token: e.target.value })
+    }
+
+    const handleTemperatureInput = (value: number[]) => setAssistant({ ...assistant, temperature: value[0] / 100 })
 
     return <div className='flex justify-center items-center w-[400px] h-[300px] group'>
         <Handle
@@ -46,14 +58,21 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
                     selectValue="选择助手核心任务" 
                     onOpen={handleSearchSelectOpen} 
                     list={tasks} 
-                    onSelect={() => console.log('')} 
+                    onSelect={handleTaskSelect} 
                 />
             </div>
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">温度</p>
                 <div className="flex space-x-2">
-                    <Slider className=" data-[range]-bg-[blue]" step={1} defaultValue={[95]} />
-                    <Input type="number" value={0.95} className="w-[100px] bg-[#FAFCFF] text-gray-600" />
+                    <Slider className=" data-[range]-bg-[blue]" 
+                        onValueCommit={handleTemperatureInput}
+                        onValueChange={(val) => setTemperature(val[0])}
+                        step={1} value={[temperature]}
+                    />
+                    <Input onChange={(e) => setTemperature(parseFloat(e.target.value) * 100)}
+                        type="number" value={temperature / 100} 
+                        className="w-[100px] bg-[#FAFCFF] text-gray-600" 
+                    />
                 </div>
             </div>
             <div className="mt-4 space-y-2">
@@ -70,7 +89,10 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <Input type="number" value={3200} className="bg-[#FAFCFF] text-gray-600" />
+                <Input onChange={handleMaxTokenInput} 
+                    type="number" value={maxToken} 
+                    className="bg-[#FAFCFF] text-gray-600" 
+                />
             </div>
         </div>
         <Handle

@@ -12,9 +12,8 @@ import {
 import RobotIcon from "@/components/icons/robot"
 import { EditIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useAssisOnlineStore from '@/hooks/assistantOnline';
-import { getRandomColor } from '@/util/randomColor';
 import { useCallback } from 'react';
 import AssistantNode from './component/AssistantNode';
 import PortraitNode from './component/PortraitNode';
@@ -23,6 +22,7 @@ import KnowledgeNode from './component/KnowledgeNode';
 import GuidNode from './component/GuidNode';
 import ModelNode from './component/ModelNode';
 import { useAssistant } from '@/store/flowNode';
+import { updateAssistant } from '@/request/API/assistant';
 
 const nodeTypes = { 
     assistantNode: AssistantNode,
@@ -56,14 +56,22 @@ export default function BuildAssisFlow() {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const navigate = useNavigate()
+    const location = useLocation()
     const setOnline = useAssisOnlineStore((state:any) => state.setOnline)
     const assistant = useAssistant((state: any) => state.assistant)
 
-    const handleOnline = () => {
-        console.log(assistant)
+    // 上线助手
+    const handleOnline = async () => {
+        // console.log(assistant)
         setNodes([])
+        await updateAssistant(1, assistant)
         navigate('/layout/chat')
         setOnline(0) // 测试用
+    }
+
+    // 保存配置
+    const handleSave = () => {
+        updateAssistant(0, assistant)
     }
 
     const onConnect = useCallback(
@@ -75,15 +83,15 @@ export default function BuildAssisFlow() {
         <div className="w-full h-[65px] flex justify-between items-center border-b">
             <div className="flex space-x-4 pl-4 items-center">
                 <div className="flex items-center">
-                    <div id="a1" className={`w-7 h-7 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: getRandomColor() }}>
+                    <div id="a1" className={`w-7 h-7 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: location.state.avatar }}>
                         <RobotIcon className="w-6 h-6 text-[white]" />
                     </div>
-                    <span className="text-xl">助手名称</span>
+                    <span className="text-xl">{location.state.name}</span>
                 </div>
                 <EditIcon className="w-5 h-5 cursor-pointer" />
             </div>
             <div className="flex space-x-4 pr-4 ">
-                <Button variant={'outline'} className="w-[100px]">保存配置</Button>
+                <Button onClick={handleSave} variant={'outline'} className="w-[100px]">保存配置</Button>
                 <Button onClick={handleOnline} className="w-[100px]">上线使用</Button>
             </div>
         </div>

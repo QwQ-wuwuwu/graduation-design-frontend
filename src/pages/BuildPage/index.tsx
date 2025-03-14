@@ -57,12 +57,14 @@ function BuildDialog({ open, onCancel, onBuild }:
     }) {
 
     const [assistant, setAssistants] = useState(assistantInit)
-    const randomColor = getRandomColor()
-    const [color, setColor] = useState(randomColor)
+    const [color, setColor] = useState(getRandomColor())
+
+    useEffect(() => {
+        setAssistants({ ...assistant, avatar: color }) // 更新头像颜色
+    }, [color])
 
     const handleColor = (color: any) => {
         setColor(color.hex)
-        console.log(color.hex)
     }
     
     return <Dialog open={open} onOpenChange={onCancel} modal={false}>
@@ -147,10 +149,11 @@ export default function BuildPage() {
         setOpen(false)
         setCreating(true)
         // await getPortrait(data.description)
+        console.log(data)
         // await createAssistant(data)
         setCreating(false)
         setAssistants([])
-        navigate(`/layout/assistant`)
+        navigate(`/layout/assistant`, { state: data })
     }
 
     const handleSetting = (id: number) => {

@@ -2,15 +2,19 @@ import { memo, useState } from "react"
 import { Handle, Position } from "@xyflow/react"
 import SearchSelect from "@/components/my-ui/SearchSelect"
 import { getList } from "@/request/API/knowledge"
+import { useAssistant } from "@/store/flowNode"
 
 function KnowledgeNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
     const [list, setList] = useState([])
+    const { assistant, setAssistant} = useAssistant()
 
     const handleSearchSelectOpen = async () => {
         const { data: { data } } = await getList()
         setList(data)
     }
+
+    const handleKnowledgeSelect = (value: string) => setAssistant({ ...assistant, knowledge_ids: value })
 
     return <div className='flex justify-center items-center w-[350px] h-[100px] group'>
         <Handle
@@ -25,7 +29,7 @@ function KnowledgeNode({ data, isConnectable }: { data: any, isConnectable : boo
             <SearchSelect 
                 list={list} 
                 selectValue="选择知识库" 
-                onSelect={() => console.log('ddd')}
+                onSelect={handleKnowledgeSelect}
                 onOpen={handleSearchSelectOpen} 
             />
         </div>

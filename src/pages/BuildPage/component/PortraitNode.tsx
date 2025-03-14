@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { ChangeEvent, memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -8,6 +8,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
+import { useAssistant, useModelTask } from '@/store/flowNode';
 
 const textarea = `模型画像例子：
 ## 角色\n你是一位专业的前端开发工程师，致力于打造用户友好的Web界面和交互体验。
@@ -22,6 +23,14 @@ const textarea = `模型画像例子：
 \n- 所有输出内容需按照给定的格式组织，不得偏离框架要求。`
 
 function PortraitNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
+
+    const { assistant, setAssistant } = useAssistant()
+
+    const handleTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value
+        setAssistant({ ...assistant, portrait: value })
+    }
+    
     return <div className='flex justify-center items-center w-[480px] h-[400px] group'>
         <Handle
             type="target"
@@ -44,7 +53,7 @@ function PortraitNode({ data, isConnectable }: { data: any, isConnectable : bool
                     </Tooltip>
                 </TooltipProvider>
             </div>
-            <Textarea placeholder={textarea} className='text-gray-600 w-[460px] h-[340px] my-scrollbar'  />
+            <Textarea onChange={handleTextAreaChange} placeholder={textarea} className='text-gray-600 w-[460px] h-[340px] my-scrollbar'  />
         </div>
         <Handle
             type="source"
