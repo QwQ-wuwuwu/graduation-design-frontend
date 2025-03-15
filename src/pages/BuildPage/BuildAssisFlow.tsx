@@ -14,7 +14,7 @@ import { EditIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAssisOnlineStore from '@/hooks/assistantOnline';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import AssistantNode from './component/AssistantNode';
 import PortraitNode from './component/PortraitNode';
 import ModelConfigNode from './component/ModelConfigNode';
@@ -58,7 +58,12 @@ export default function BuildAssisFlow() {
     const navigate = useNavigate()
     const location = useLocation()
     const setOnline = useAssisOnlineStore((state:any) => state.setOnline)
-    const assistant = useAssistant((state: any) => state.assistant)
+    const { assistant, setAssistant } = useAssistant()
+
+    useEffect(() => {
+        console.log(location.state)
+        setAssistant({ ...assistant, id: location.state.id })
+    }, [])
 
     // 上线助手
     const handleOnline = async () => {
@@ -71,6 +76,7 @@ export default function BuildAssisFlow() {
 
     // 保存配置
     const handleSave = () => {
+        console.log(assistant)
         updateAssistant(0, assistant)
     }
 

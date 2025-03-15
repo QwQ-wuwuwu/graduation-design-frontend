@@ -21,3 +21,13 @@ export const updateAssistant = async (online = 0, data: any) => {
         on_off: online
     })
 }
+
+// 首页助手
+export const getOnlineAssistants = async () => {
+    return customAxios.get(`/assistant/list?user_id=${user.id}`)
+}
+
+// 构建页助手
+export const getAssistants = async () => {
+    return customAxios.get(`/assistant/build_list?user_id=${user.id}`)
+}

@@ -1,4 +1,4 @@
-import { memo, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { Handle, Position } from "@xyflow/react"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,10 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
     const { assistant, setAssistant} = useAssistant()
     const [ temperature, setTemperature ] = useState(95)
     const [ maxToken, setMaxToken ] = useState(3200)
+
+    useEffect(() => {
+        setAssistant({ ...assistant, temperature, max_token: maxToken })
+    }, [])
 
     const handleSearchSelectOpen = async () => {
         if(modelId === -1) {
