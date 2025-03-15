@@ -1,32 +1,38 @@
 import { useEffect, useRef, useState } from "react"
-import { getRandomColor } from "@/util/randomColor"
 import SearchInput from "@/components/my-ui/SearchInput"
 import RobotIcon from "@/components/icons/robot"
 import useAssisOnlineStore from "@/hooks/assistantOnline"
+import { getOnlineAssistants } from "@/request/API/assistant"
+
+type Assistant = {
+    id: number,
+    name: string,
+    description?: string,
+    target: boolean,
+    avatar: string
+}
 
 export default function Sidebar(
     { onSelect }: 
     { onSelect: (id: number) => void}) {
 
-    const [assistants, setAssistants] = useState([
-        { name: '助手一', id: 0, description: '你好啊', target: false },
-        { name: '助手二', id: 1, description: '今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗', target: false },
-        { name: '助手三', id: 2, description: '吃饭没', target: false },
-        { name: '助手四', id: 3, description: '晚上好', target: false },
-        { name: '助手四', id: 4, description: '晚上好', target: false },
-        { name: '助手四', id: 5, description: '晚上好', target: false },
-        { name: '助手四', id: 6, description: '晚上好', target: false },
-        { name: '助手四', id: 7, description: '晚上好', target: false },
-        { name: '助手四', id: 8, description: '晚上好', target: false },
-        { name: '助手四', id: 9, description: '晚上好', target: false },
-        { name: '助手四', id: 10, description: '晚上好', target: false },
-        { name: '助手四', id: 11, description: '晚上好', target: false },
-        { name: '助手四', id: 12, description: '晚上好', target: false },
-        { name: '助手四', id: 13, description: '晚上好', target: false },
-    ])
+    const [assistants, setAssistants] = useState<Assistant[]>([])
     const searchRef = useRef<HTMLInputElement>(null)
     const onlineId = useAssisOnlineStore((state:any) => state.onlineId)
     const setOffline = useAssisOnlineStore((state:any) => state.setOffline)
+
+    useEffect(() => {
+        getOnlineAssistants().then((res: any) => {
+            const list = res.data.data
+            setAssistants(list.map((l: any) => ({ 
+                id: l.id, 
+                name: l.name, 
+                description: l.description, 
+                target: false,
+                avatar: l.avatar
+             })))
+        })
+    }, [])
 
     useEffect(() => {
         if(onlineId !== -1) {
@@ -62,7 +68,7 @@ export default function Sidebar(
                 style={{ backgroundColor: assistant.target ? '#EDEFF6' : '' }}
                 className={`flex flex-col cursor-pointer hover:bg-[#EDEFF6] p-3 mt-2 w-[200px] h-[100px] bg-[#F9F9FC] rounded-lg`}>
                     <div className="flex items-center">
-                        <div className={`w-6 h-6 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: getRandomColor() }}>
+                        <div className={`w-6 h-6 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: assistant.avatar }}>
                             <RobotIcon className="w-5 h-5 text-[white]" />
                         </div>
                         <span className=" font-bold text-sm whitespace-nowrap overflow-hidden text-ellipsis">{assistant.name}</span>

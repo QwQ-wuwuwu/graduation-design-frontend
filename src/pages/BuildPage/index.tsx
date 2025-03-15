@@ -44,9 +44,13 @@ const assistantInit = {
 }
 
 interface Assistant {
+    id?: number,
     name: string,
     description: string,
-    avatar: string
+    avatar: string,
+    target?: boolean,
+    user_name?: string,
+    on_off?: number
 }
 
 function BuildDialog({ open, onCancel, onBuild }: 
@@ -112,33 +116,32 @@ function BuildDialog({ open, onCancel, onBuild }:
 
 import { getPortrait } from "@/request/model_api/portrait"
 import Loading from "../Loading"
-import { createAssistant } from "@/request/API/assistant"
+import { createAssistant, getAssistants } from "@/request/API/assistant"
+import { useToast } from '@/hooks/use-toast'
 
 export default function BuildPage() {
 
     const navigate = useNavigate()
-    const data = [
-        { name: '助手一', id: 0, description: '你好啊', target: false },
-        { name: '助手二', id: 1, description: '今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗今天心情好吗', target: false },
-        { name: '助手三', id: 2, description: '吃饭没', target: false },
-        { name: '助手四', id: 3, description: '晚上好', target: false },
-        { name: '助手三', id: 4, description: '吃饭没', target: false },
-        { name: '助手四', id: 5, description: '晚上好', target: false },
-        { name: '助手三', id: 6, description: '吃饭没', target: false },
-        { name: '助手四', id: 7, description: '晚上好', target: false },
-        { name: '助手三', id: 8, description: '吃饭没', target: false },
-        { name: '助手四', id: 9, description: '晚上好', target: false },
-        { name: '助手三', id: 10, description: '吃饭没', target: false },
-        { name: '助手四', id: 11, description: '晚上好', target: false },
-        { name: '助手三', id: 12, description: '吃饭没', target: false },
-        { name: '助手四', id: 13, description: '晚上好', target: false },
-    ]
-    const [assistants, setAssistants] = useState(data)
+    const [assistants, setAssistants] = useState<Assistant[]>([])
     const [open, setOpen] = useState(false)
     const build = useIndexViewBuildStore((state: any) => state.build)
     const setUnBuild = useIndexViewBuildStore((state: any) => state.setUnBuild)
+    const { toast } = useToast()
+
     useEffect(() => {
         build && setOpen(true)
+        getAssistants().then(res => {
+            const list = res.data.data
+            setAssistants(list.map((l: any) => ({ 
+                id: l.id, 
+                name: l.name, 
+                description: l.description, 
+                target: false,
+                avatar: l.avatar,
+                user_name: l.user_name,
+                on_off: l.on_off
+             })))
+        })
         return () => {
             setUnBuild()
         }
@@ -146,14 +149,18 @@ export default function BuildPage() {
 
     const [creating, setCreating] = useState(false)
     const handleCreate = async (data: Assistant) => {
-        setOpen(false)
-        setCreating(true)
+        console.log(open)
         // await getPortrait(data.description)
-        console.log(data)
-        // await createAssistant(data)
-        setCreating(false)
-        setAssistants([])
-        navigate(`/layout/assistant`, { state: data })
+        const res = await createAssistant(data)
+        if(res.data.code === 200) {
+            setOpen(false)
+            setCreating(true)
+            navigate(`/layout/assistant`, { state: { ...data, id: res.data.data.insertId} })
+            setTimeout(() => setCreating(false), 1000)
+            setAssistants([])
+            return
+        }
+        return toast({ variant: 'destructive', title: '创建失败', description: '助手名称不可以重复哟~', duration: 2000 })
     }
 
     const handleSetting = (id: number) => {
@@ -187,14 +194,17 @@ export default function BuildPage() {
             </CardFooter>
         </Card>
         {assistants.map((assistant) => (
-        <Card onClick={() => handleSetting(assistant.id)} key={assistant.id} className="w-[300px] mr-6 mb-4 group hover:shadow-lg h-[300px] group cursor-pointer">
+        <Card onClick={() => handleSetting(assistant.id as number)} key={assistant.id} className="w-[300px] mr-6 mb-4 group hover:shadow-lg h-[300px] group cursor-pointer">
             <CardHeader>
                 <CardTitle className=" flex items-center justify-between">
-                    <div className="w-6 h-6 rounded-sm bg-black flex mr-6 justify-center items-center">
-                        <PlusIcon className=" w-4 h-4 text-white"/>
+                    <div style={{ backgroundColor: assistant.avatar }} className={`w-7 h-7 rounded-lg flex mr-6 justify-center items-center`}>
+                        <RobotIcon className="w-6 h-6 text-white"/>
                     </div>
                     <span>{assistant.name}</span>
-                    <Switch onClick={(e) => e.stopPropagation()} onChange={handleSwitch} />
+                    <Switch defaultChecked={assistant.on_off === 1} 
+                        onClick={(e) => e.stopPropagation()} 
+                        onChange={handleSwitch} 
+                    />
                 </CardTitle>
                 <CardDescription className="pt-4 h-[90px]">{assistant.description}</CardDescription>
             </CardHeader>
@@ -202,7 +212,7 @@ export default function BuildPage() {
             <CardFooter className="text-gray-500 text-center flex justify-between items-center">
                 <div className="flex items-center">
                     <UserIcon />
-                    <Label><span>创建用户:xxx</span></Label>
+                    <Label><span>创建用户:{assistant.user_name}</span></Label>
                 </div>
                 <div className="text-gray-500 flex opacity-0 group-hover:opacity-[100] items-center space-x-2">
                     {/* @ts-ignore */}
