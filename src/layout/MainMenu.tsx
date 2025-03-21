@@ -40,9 +40,9 @@ export default function MainMenu() {
                 <NavLinkButton to="/layout/knowledge" value="知识库">
                     <KnowledgeIcon className='w-8 h-8'/>
                 </NavLinkButton>
-                {user.role === 0 && <NavLinkButton to="/layout/preset" value="预置助手">
+                {/* {user.role === 0 && <NavLinkButton to="/layout/preset" value="预置助手">
                     <PresetIcon className='w-8 h-8 p-[2px]'/>
-                </NavLinkButton>}
+                </NavLinkButton>} */}
                 <NavLinkButton to="/layout/model" value="模型" textClass="tracking-[14px]">
                     <ModelIcon className='w-8 h-8'/>
                 </NavLinkButton>

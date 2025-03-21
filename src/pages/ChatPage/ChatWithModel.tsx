@@ -16,7 +16,16 @@ import { chatWithModel } from "@/request/model_api/chat"
 import { useEffect, useRef, useState } from "react"
 import { marked } from 'marked';
 
-export default function ChatWhithModel({ className }: { className?: string }) {
+export default function ChatWhithModel(
+    { 
+        className,
+        assistant 
+    }
+    : { 
+        className?: string,
+        assistant: object
+    }
+) {
 
     const [input, setInput] = useState('')
     const user = useRef(JSON.parse(sessionStorage.getItem('user') as string))
