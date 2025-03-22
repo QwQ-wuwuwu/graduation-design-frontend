@@ -13,8 +13,9 @@ type Assistant = {
 }
 
 export default function Sidebar(
-    { onSelect }: 
-    { onSelect: (id: number) => void}) {
+    { onSelect }
+    : { onSelect: (id: number) => void}
+) {
 
     const [assistants, setAssistants] = useState<Assistant[]>([])
     const searchRef = useRef<HTMLInputElement>(null)
@@ -65,8 +66,8 @@ export default function Sidebar(
         <div className="flex flex-col items-center mt-[50px] overflow-y-auto scrollbar-hide">
             {assistants.map((assistant) => (
                 <div key={assistant.id} onClick={() => handleClick(assistant.id)}
-                style={{ backgroundColor: assistant.target ? '#EDEFF6' : '' }}
-                className={`flex flex-col cursor-pointer hover:bg-[#EDEFF6] p-3 mt-2 w-[200px] h-[100px] bg-[#F9F9FC] rounded-lg`}>
+                    style={{ backgroundColor: assistant.target ? '#EDEFF6' : '' }}
+                    className={`flex flex-col cursor-pointer hover:bg-[#EDEFF6] p-3 mt-2 w-[200px] h-[100px] bg-[#F9F9FC] rounded-lg`}>
                     <div className="flex items-center">
                         <div className={`w-6 h-6 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: assistant.avatar }}>
                             <RobotIcon className="w-5 h-5 text-[white]" />
