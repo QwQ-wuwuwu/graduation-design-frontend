@@ -45,11 +45,11 @@ export default function Sidebar(
         return () => setOffline()
     }, [])
 
-    const handleClick = (id: number) => {
-        setAssistants(pre => pre.map((assistant) => assistant.id === id 
+    const handleClick = (assist: any) => {
+        setAssistants(pre => pre.map((assistant) => assistant.id === assist.id 
         ? { ...assistant, target: true } 
         : {...assistant, target: false}))
-        onSelect(id)
+        onSelect(assist)
     }
 
     const handleKeyDdown = (e: any) => {
@@ -65,7 +65,7 @@ export default function Sidebar(
         </div>
         <div className="flex flex-col items-center mt-[50px] overflow-y-auto scrollbar-hide">
             {assistants.map((assistant) => (
-                <div key={assistant.id} onClick={() => handleClick(assistant.id)}
+                <div key={assistant.id} onClick={() => handleClick(assistant)}
                     style={{ backgroundColor: assistant.target ? '#EDEFF6' : '' }}
                     className={`flex flex-col cursor-pointer hover:bg-[#EDEFF6] p-3 mt-2 w-[200px] h-[100px] bg-[#F9F9FC] rounded-lg`}>
                     <div className="flex items-center">

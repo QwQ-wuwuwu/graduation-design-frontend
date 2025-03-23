@@ -31,3 +31,8 @@ export const getOnlineAssistants = async () => {
 export const getAssistants = async () => {
     return customAxios.get(`/assistant/build_list?user_id=${user.id}`)
 }
+
+// 获取助手聊天信息
+export const getAssistantChat = async (id: number) => {
+    return customAxios.get(`/assistant/chat?id=${id}`)
+}

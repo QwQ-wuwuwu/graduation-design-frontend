@@ -12,9 +12,11 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { chatWithModel } from "@/request/model_api/chat"
+// import { chatWithZhiPuModel } from "@/request/model_api/chat"
 import { useEffect, useRef, useState } from "react"
 import { marked } from 'marked';
+import { getAssistantChat } from "@/request/API/assistant"
+import { chatWithModel } from "@/request/model_api/chat"
 
 export default function ChatWhithModel(
     { 
@@ -23,7 +25,7 @@ export default function ChatWhithModel(
     }
     : { 
         className?: string,
-        assistant: object
+        assistant: any
     }
 ) {
 
@@ -35,6 +37,7 @@ export default function ChatWhithModel(
     const [timeId, setTimeId] = useState<any>(null)
     const [isShow, setIsShow] = useState(false)
     const [disabled, setDisabled] = useState(false)
+    const [chatInfo, setChatInfo] = useState<any>()
 
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
@@ -60,110 +63,47 @@ export default function ChatWhithModel(
         setInput(textarea.value)
     }
 
-    const [messages, setMessages] = useState([
-        { type: 'model', content: '自动调整高度：最常用的方式是使用 JavaScript（纯 JavaScript 或 React），通过 textarea.scrollHeight 动态设置高度。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'user', content: 'resize 和 overflow 控制，适合控制 textarea 的大小和溢出。' },
-        { type: 'model', content: '在现代浏览器中，textarea 的高度可以通过 min-height 和 max-height 来控制，虽然它不会完全随着内容高度变化，但能在一定范围内保持弹性。' },        
-        ])
+    const [messages, setMessages] = useState<any[]>([])
+
+    useEffect(() => {
+        getAssistantChat(assistant.id).then((res: any) => {
+            const info = res.data.data
+            setChatInfo(info)
+            setMessages([{ type: 'model', content: info.portrait }])
+        })
+    }, [assistant])
 
     const handleClick = () => {
         if(!input.trim()) return
         const tempInput = input.trim()
-        const data = JSON.stringify({
-            "model": "qwen-plus-latest",
-            "messages": [
-               {
-                  "role": "system",
-                  "content": "你是一个命理大师，你拥有丰富的经验与见识，并且你不会回答除命理相关的问题"
-               },
-               {
-                  "role": "user",
-                  "content": `${tempInput}`
-               }
-            ],
-            "temperature": 0.2,
-            "max_tokens": 2000,
-            "stream": false,
-            "web_search": false
-        });
         setMessages([...messages,{ type: 'user', content: tempInput}, { type: 'model', content: '' }])
         setInput('')
         setDisabled(true)
-        chatWithModel(data).then(res => {
-            const result = res.data.choices[0].message.content
-            let index = 0, str = ''
-            let randomNum = Math.floor(Math.random() * 10 + 1)
-            const id = setInterval(() => {
-                str += result.slice(index, index + randomNum)
-                index += randomNum
-                randomNum = Math.floor(Math.random() * 10 + 1)
-                setMessages(pre => pre.map((msg, i) => i === pre.length - 1 ? { ...msg, content: str } : msg))
-                if(index >= result.length - 1) {
-                    clearInterval(id)
-                    setTimeId(null)
-                    setDisabled(false)
-                }
-            }, 100)
-            setTimeId(id)
-        }, () => {
+        // chatWithModel(chatInfo, []).then((res: any) => {
+        //     const result = res.data.choices[0].message.content
+        //     let index = 0, str = ''
+        //     let randomNum = Math.floor(Math.random() * 10 + 1)
+        //     const id = setInterval(() => {
+        //         str += result.slice(index, index + randomNum)
+        //         index += randomNum
+        //         randomNum = Math.floor(Math.random() * 10 + 1)
+        //         setMessages(pre => pre.map((msg, i) => i === pre.length - 1 ? { ...msg, content: str } : msg))
+        //         if(index >= result.length - 1) {
+        //             clearInterval(id)
+        //             setTimeId(null)
+        //             setDisabled(false)
+        //         }
+        //     }, 100)
+        //     setTimeId(id)
+        // }, () => {
+        //     setDisabled(false)
+        //     setMessages(pre => pre.map((msg) => msg.content === '' ? { type: 'model', content: '哎呦~网络似乎出了点小问题呢' } : msg))
+        // })
+        chatWithModel(chatInfo, [], (text: string) => {
+            setMessages(pre => pre.map((msg, i) => i === pre.length - 1 
+                ? { ...msg, content: msg.content + text } 
+                : msg))
             setDisabled(false)
-            setMessages(pre => pre.map((msg) => msg.content === '' ? { type: 'model', content: '哎呦~网络似乎出了点小问题呢' } : msg))
         })
     }
 
@@ -186,8 +126,9 @@ export default function ChatWhithModel(
             {messages.map((message, index) => (
                 message.type === 'model' 
                 ? <div key={index} className="flex justify-start mb-8">
-                    <div className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full bg-[#111111]">
-                        <span className=' text-[11px] text-white font-[550] leading-[40px]'>{'大模型'}</span>
+                    <div style={{backgroundColor: assistant.avatar}} 
+                        className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full">
+                        <span className=' text-[11px] text-white font-[550] leading-[40px]'>{assistant.name}</span>
                     </div>
                     <div dangerouslySetInnerHTML={{ __html: message.content === '' ? '正在思考中...' : marked.parse(message.content) }}
                     className="bg-[#F5F6F8] max-w-[600px] p-2 rounded-xl ml-2 prose prose-md" />

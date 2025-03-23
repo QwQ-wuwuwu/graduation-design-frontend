@@ -24,5 +24,5 @@ export const getPortrait = async (userMsg: string) => {
         ],
         "stream": false
     }
-    return await zhipuAxios.post('', data)
+    // return await zhipuAxios.post('', data)
 }

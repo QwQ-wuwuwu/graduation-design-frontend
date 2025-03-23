@@ -14,9 +14,9 @@ export default function ChatPage() {
     const [chat, setChat] = useState(false)
     const [assistant, setAssistant] = useState(initialData);
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (assist: any) => {
         setChat(true)
-        setAssistant({...initialData, id})
+        setAssistant(assist)
     }
 
     return <div className="h-full w-full flex">
