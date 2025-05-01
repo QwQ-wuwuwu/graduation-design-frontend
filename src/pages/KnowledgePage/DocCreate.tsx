@@ -22,6 +22,7 @@ import { getModelList } from "@/request/API/model"
 import { createDocKnowledge } from "@/request/API/knowledge"
 import { toast } from "@/hooks/use-toast"
 import { User } from "@/types"
+import { createKnowledgeApi } from "@/request/model_api/knowledge"
 
 type Knowledge = {
     name: string,
@@ -57,7 +58,11 @@ export default function DocCreate({
     }
 
     const handleCreate = async () => {
-        const { data: { code }} = await createDocKnowledge({ ...knowledge, user_id: user.id })
+        const res: any = await createKnowledgeApi({ name: knowledge.name, description: knowledge.description });
+        if (res.data.code !== 200) {
+            return toast({title: '创建失败', description: '创建知识库失败', variant: 'destructive', duration: 2000})
+        }
+        const { data: { code }} = await createDocKnowledge({ ...knowledge, user_id: user.id, knowledge_id: res.data.data.id })
         if(code !== 200) {
             return toast({title: '创建失败', description: '创建文档知识库失败', variant: 'destructive', duration: 2000})
         }

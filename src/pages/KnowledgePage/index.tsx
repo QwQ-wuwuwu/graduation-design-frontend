@@ -83,7 +83,7 @@ export default function KnowledgePage() {
         return <div className=" w-full h-12 flex justify-end space-x-4 items-center">
             <SearchInput placeholder="知识库名称" />
             <Button onClick={handleCreate} className="w-[150px]">创建知识库</Button>
-            <Button onClick={handleTest}>test</Button>
+            {/* <Button onClick={handleTest}>test</Button> */}
         </div>
     }, [location.pathname, knowledge])
 
