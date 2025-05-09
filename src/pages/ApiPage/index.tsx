@@ -97,7 +97,7 @@ export default function ApiPage() {
                         <TableCell>
                             <div className="max-w-[600px] whitespace-pre-wrap break-all text-truncate-3">{api.description}</div>
                         </TableCell>
-                        <TableCell>{api.task_name}</TableCell>
+                        <TableCell className="w-[100px]">{api.task_name}</TableCell>
                         <TableCell>
                             <div className="max-w-[600px] whitespace-pre-wrap break-all text-truncate-3">{api.task_desc}</div>
                         </TableCell>

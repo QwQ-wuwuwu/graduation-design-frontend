@@ -167,7 +167,8 @@ export default function BuildPage() {
         navigate(`/layout/assistant?id=${id}`)
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (e: any, id: number) => {
+        e.stopPropagation()
         console.log(id)
     }
 
@@ -218,7 +219,7 @@ export default function BuildPage() {
                     {/* @ts-ignore */}
                     <SettingIcon onClick={handleSetting} className="w-7 h-7" />
                     {/* @ts-ignore */}
-                    <DeleteIcon onClick={handleDelete} className="w-5 h-5" />
+                    <DeleteIcon onClick={(e) => handleDelete(e, assistant.id)} className="w-5 h-5" />
                 </div>
             </CardFooter>
         </Card>

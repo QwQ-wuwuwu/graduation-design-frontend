@@ -24,6 +24,11 @@ const Mangagement = lazy(() => import('@/pages/ModelPage/Management'))
 const Finetune = lazy(() => import('@/pages/ModelPage/Finetune'))
 const DocKnowDetail = lazy(() => import('@/pages/KnowledgePage/component/DocKnowDetail'))
 const QAKnowDetail = lazy(() => import('@/pages/KnowledgePage/component/QAKnowDetail'))
+const SystemPage = lazy(() => import('@/pages/SystemPage'))
+const SystemUser = lazy(() => import('@/pages/SystemPage/components/User'))
+const SystemModel = lazy(() => import('@/pages/SystemPage/components/Model'))
+const SystemAssistant = lazy(() => import('@/pages/SystemPage/components/Assistant'))
+const EvaluationPage = lazy(() => import('@/pages/EvaluationPage'))
 
 export const routes: MyRoute[] = [
     { path: '/', element: <Login /> },
@@ -46,6 +51,7 @@ export const routes: MyRoute[] = [
         { path: 'preset', element: <BuildPage />, meta: ['admin'] },
         { path: 'dataset', element: <DatasetPage />, meta: ['admin'] },
         { path: 'taskset', element: <TasksetPage />, meta: ['admin'] },
+        { path: 'evaluation', element: <EvaluationPage />, meta: ['admin', 'user'] },
         { path: 'user', element: <UserPage />, meta: ['admin', 'user'],
             children: [
             { path: '', element: <UserIfonPage />, meta: ['admin', 'user'] },
@@ -53,7 +59,14 @@ export const routes: MyRoute[] = [
             { path: 'theme', element: <ThemePage />, meta: ['admin', 'user'] },
         ]},
         { path: 'api', element: <ApiPage />, meta: ['admin'] },
-        { path: 'system', element: <ChatPage />, meta: ['admin'] },
+        { path: 'system', element: <SystemPage />, meta: ['admin'], 
+            children: [
+                { path: '', element: <SystemModel />, meta: ['admin'] },
+                { path: 'model', element: <SystemModel />, meta: ['admin'] },
+                { path: 'user', element: <SystemUser />, meta: ['admin'] },
+                { path: 'assistant', element: <SystemAssistant />, meta: ['admin'] },
+            ]
+        },
         { path: 'assistant', element: <BuildAssistant />, meta: ['admin', 'user'] },
     ]},
     { path: '*', element: <Page404/> },

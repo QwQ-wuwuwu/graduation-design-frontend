@@ -54,6 +54,20 @@ export default function HeaderMenu() {
         }
     }
 
+    const handleSystemChange = (value: string) => {
+        switch (value) {
+            case 'model':
+                navigate('/layout/system/model')
+                return
+            case 'user':
+                navigate('/layout/system/user')
+                return
+            case 'assistant':
+                navigate('/layout/system/assistant')
+                return
+        }
+    }
+
     useEffect(() => {
         setCurrentPath(window.location.pathname)
     }, [window.location.pathname])
@@ -95,6 +109,16 @@ export default function HeaderMenu() {
                     <TabsList className='space-x-3 h-full'>
                         <TabsTrigger value='management' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型管理</TabsTrigger>
                         <TabsTrigger value='finetune' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型微调</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+            </div>}
+            {/* 系统管理选项卡 */}
+            {currentPath.includes('/layout/system') && <div>
+                <Tabs defaultValue='model' onValueChange={handleSystemChange}>
+                    <TabsList className='space-x-3 h-full'>
+                        <TabsTrigger value='model' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型实况</TabsTrigger>
+                        <TabsTrigger value='user' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />用户管理</TabsTrigger>
+                        <TabsTrigger value='assistant' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />助手管理</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>}

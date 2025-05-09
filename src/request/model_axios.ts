@@ -21,7 +21,8 @@ const createAxios = (axisoInfo: AxiosInfo, stream = false) => {
         baseURL: axisoInfo.baseURL,
         headers: {
             "Content-Type": stream ? 'text/event-stream' : "application/json",
-            "Authorization": `Bearer ${axisoInfo.token}`
+            "Authorization": `Bearer ${axisoInfo.token}`,
+            "accept": "*/*",
         },
     })
 }

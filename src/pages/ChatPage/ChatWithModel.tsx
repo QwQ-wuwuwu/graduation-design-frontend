@@ -16,7 +16,10 @@ import { cn } from "@/lib/utils"
 import { useEffect, useRef, useState } from "react"
 import { marked } from 'marked';
 import { getAssistantChat } from "@/request/API/assistant"
-import { chatWithModel } from "@/request/model_api/chat"
+import { send } from "@/request/API/chat"
+// import { chatWithApplication, chatWithApplicationSSE, chatWithModel, initialChat } from "@/request/model_api/chat"
+// import { useModelChat } from "@/hooks/useModelChat"
+// import { EventSourcePolyfill } from "event-source-polyfill"
 
 export default function ChatWhithModel(
     { 
@@ -73,7 +76,7 @@ export default function ChatWhithModel(
         })
     }, [assistant])
 
-    const handleClick = () => {
+    const handleClick = async () => {
         if(!input.trim()) return
         const tempInput = input.trim()
         setMessages([...messages,{ type: 'user', content: tempInput}, { type: 'model', content: '' }])
@@ -99,12 +102,34 @@ export default function ChatWhithModel(
         //     setDisabled(false)
         //     setMessages(pre => pre.map((msg) => msg.content === '' ? { type: 'model', content: '哎呦~网络似乎出了点小问题呢' } : msg))
         // })
-        chatWithModel(chatInfo, [], (text: string) => {
-            setMessages(pre => pre.map((msg, i) => i === pre.length - 1 
-                ? { ...msg, content: msg.content + text } 
+        // 用于测试的应用id：1919369230273437696
+        // chatWithModel(chatInfo, [], (text: string) => {
+        //     setMessages(pre => pre.map((msg, i) => i === pre.length - 1 
+        //         ? { ...msg, content: msg.content + text } 
+        //         : msg))
+        //     setDisabled(false)
+        // })
+        // chatWithApplication();
+        // chatWithApplicationSSE();
+        const { data: { data: { sessionId } } } = await send({});
+        const source = new EventSource(`http://localhost:3002/api/chat/stream?sessionId=${sessionId}`);
+        source.onopen = () => {
+            console.log('Connection opened');
+        }
+        source.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            setMessages(pre => pre.map((msg, i) => i === pre.length - 1
+                ? { ...msg, content: data.data }
                 : msg))
-            setDisabled(false)
-        })
+            if (data.event === 'finish') {
+                setDisabled(false)
+                source.close();
+            }
+        }
+        source.onerror = (error) => {
+            console.error('Error:', error);
+            source.close();
+        }
     }
 
     useEffect(() => { // 助手回答完毕自动聚焦输入框

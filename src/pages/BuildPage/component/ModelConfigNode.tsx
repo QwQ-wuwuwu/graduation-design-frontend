@@ -10,19 +10,40 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { useAssistant, useModelTask } from "@/store/flowNode"
 import { getTasks, getTaskByModel } from "@/request/API/api"
+
+const answerStyleList: { id: number, name: string, explain: string}[] = [
+    { id: 1, name: "strict", explain: '严谨' },
+    { id: 2, name: "moderate", explain: '适中' },
+    { id: 3, name: "flexible", explain: '发散' },
+    { id: 4, name: "custom", explain: '自定义' },
+];
 
 function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
     const [tasks, setTasks] = useState([])
     const modelId: number = useModelTask((state: any) => state.modelId);
-    const { assistant, setAssistant} = useAssistant()
-    const [ temperature, setTemperature ] = useState(95)
-    const [ maxToken, setMaxToken ] = useState(3200)
+    const { assistant, setAssistant } = useAssistant()
+    const [ temperature, setTemperature ] = useState(assistant.temperature ? assistant.temperature * 100 : 95)
+    const [ maxToken, setMaxToken ] = useState(assistant.max_token || 3072)
+    const [ paramDesc, setParamDesc ] = useState(assistant.param_desc || 'custom')
 
     useEffect(() => {
-        setAssistant({ ...assistant, temperature, max_token: maxToken })
+        console.log('assistant', assistant)
+        // setAssistant({ 
+        //     ...assistant, 
+        //     temperature: (temperature / 100), 
+        //     max_token: maxToken,
+        //     param_desc: paramDesc,
+        // })
     }, [])
 
     const handleSearchSelectOpen = async () => {
@@ -44,7 +65,7 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
 
     const handleTemperatureInput = (value: number[]) => setAssistant({ ...assistant, temperature: value[0] / 100 })
 
-    return <div className='flex justify-center items-center w-[400px] h-[300px] group'>
+    return <div className='flex justify-center items-center w-[400px] h-[370px] group'>
         <Handle
             type="target"
             position={Position.Left}
@@ -59,6 +80,7 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">核心任务</p>
                 <SearchSelect 
+                    defaultValue={assistant.task_name || ''}
                     selectValue="选择助手核心任务" 
                     onOpen={handleSearchSelectOpen} 
                     list={tasks} 
@@ -66,7 +88,7 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
                 />
             </div>
             <div className="mt-4 space-y-2">
-                <p className="text-gray-500 font-bold">温度</p>
+                <p className="text-gray-500 font-bold">模型采样温度</p>
                 <div className="flex space-x-2">
                     <Slider className=" data-[range]-bg-[blue]" 
                         onValueCommit={handleTemperatureInput}
@@ -97,6 +119,21 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
                     type="number" value={maxToken} 
                     className="bg-[#FAFCFF] text-gray-600" 
                 />
+            </div>
+            <div className="mt-4 space-y-2">
+                <p className="text-gray-500 font-bold">回答风格</p>
+                <div className='w-full'>
+                    <Select defaultValue={assistant.param_desc || ''} onValueChange={(val) => setAssistant({ ...assistant, param_desc: val })}>
+                        <SelectTrigger>
+                            <SelectValue placeholder='选择回答风格' className='bg-white' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {answerStyleList.map(model => (
+                                <SelectItem value={model.name} key={model.id}>{model.explain}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
         </div>
         <Handle

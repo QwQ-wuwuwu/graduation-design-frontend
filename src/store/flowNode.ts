@@ -9,12 +9,16 @@ type Assistant = {
     user_id?: number,
     portrait?: string,
     api_id?: number,
+    task_name?: string,
     model_id?: number,
+    model_name?: string,
     temperature?: number,
     max_token?: number,
     knowledge_ids?: string,
     guide_word?: string,
     on_off?: number,
+    param_desc?: string,
+    flow_limit?: number,
     insert_time?: string,
     update_time?: string
 }

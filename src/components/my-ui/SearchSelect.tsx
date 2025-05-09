@@ -20,9 +20,9 @@ export default function SearchSelect({
     onSelect: (value: string) => void
 }) {
     return <div>
-        <Select onOpenChange={() => onOpen && onOpen()} onValueChange={onSelect}>
+        <Select defaultValue={defaultValue} onOpenChange={() => onOpen && onOpen()} onValueChange={onSelect}>
             <SelectTrigger>
-                <SelectValue defaultValue={defaultValue} placeholder={selectValue} />
+                <SelectValue placeholder={selectValue} />
             </SelectTrigger>
             <SelectContent>
                 <SearchInput onChange={onSearch} className="mb-4" placeholder={inputPlaceholder} />

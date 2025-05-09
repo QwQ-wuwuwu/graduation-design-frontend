@@ -13,8 +13,14 @@ type Assistant = {
 }
 
 export default function Sidebar(
-    { onSelect }
-    : { onSelect: (id: number) => void}
+    { 
+        onSelect,
+        onShow 
+    }
+    : { 
+        onSelect: (id: number) => void,
+        onShow: () => void
+    }
 ) {
 
     const [assistants, setAssistants] = useState<Assistant[]>([])
@@ -25,13 +31,16 @@ export default function Sidebar(
     useEffect(() => {
         getOnlineAssistants().then((res: any) => {
             const list = res.data.data
-            setAssistants(list.map((l: any) => ({ 
-                id: l.id, 
-                name: l.name, 
-                description: l.description, 
-                target: false,
-                avatar: l.avatar
-             })))
+            if (list.length > 0) {
+                onShow()
+                setAssistants(list.map((l: any) => ({ 
+                    id: l.id, 
+                    name: l.name, 
+                    description: l.description, 
+                    target: false,
+                    avatar: l.avatar
+                 })))
+            }
         })
     }, [])
 

@@ -13,6 +13,7 @@ export default function ChatPage() {
 
     const [chat, setChat] = useState(false)
     const [assistant, setAssistant] = useState(initialData);
+    const [show, setShow] = useState(false)
 
     const handleSelect = (assist: any) => {
         setChat(true)
@@ -20,7 +21,7 @@ export default function ChatPage() {
     }
 
     return <div className="h-full w-full flex">
-        <Sidebar onSelect={handleSelect} />
+        {show && <Sidebar onSelect={handleSelect} onShow={() => setShow(true)} />}
         {chat ? <ChatWhithModel assistant={assistant} className="w-[calc(100%-220px)] relative h-full" /> : <IndexView />}
     </div>
 }

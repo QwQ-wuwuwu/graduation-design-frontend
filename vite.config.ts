@@ -21,7 +21,10 @@ export default defineConfig({
   define: { 
     __APP_ENV__: {
       BASE_URL: '',
-      SECRET_KEY: 'my_secret_key_QAQ-wuwuwu'
+      SECRET_KEY: 'my_secret_key_QAQ-wuwuwu',
+      // 用于测试的应用id
+      APPLICATION_ID: 1919369230273437696,
+      xxx: 1919406012620828672
     },
   },
   resolve: {

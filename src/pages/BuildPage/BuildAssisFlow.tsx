@@ -12,9 +12,9 @@ import {
 import RobotIcon from "@/components/icons/robot"
 import { EditIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import useAssisOnlineStore from '@/hooks/assistantOnline';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AssistantNode from './component/AssistantNode';
 import PortraitNode from './component/PortraitNode';
 import ModelConfigNode from './component/ModelConfigNode';
@@ -22,7 +22,8 @@ import KnowledgeNode from './component/KnowledgeNode';
 import GuidNode from './component/GuidNode';
 import ModelNode from './component/ModelNode';
 import { useAssistant } from '@/store/flowNode';
-import { updateAssistant } from '@/request/API/assistant';
+import { getAssistant, updateAssistant } from '@/request/API/assistant';
+import { createApplication } from '@/request/model_api/application';
 
 const nodeTypes = { 
     assistantNode: AssistantNode,
@@ -34,12 +35,12 @@ const nodeTypes = {
 }
 
 const initialNodes = [
-    { id: '1', type: 'modelNode', position: { x: -100, y: 350 }, data: { label: '1' } },
-    { id: '2', type: 'portraitNode', position: { x: 306, y: 50 }, data: { label: '2' } },
-    { id: '3', type: 'modelConfigNode', position: { x: 300, y: 500 }, data: { label: '3' } },
-    { id: '4', type: 'knowledgeNode', position: { x: 800, y: 500 }, data: { label: '4' } },
-    { id: '5', type: 'guidNode', position: { x: 800, y: 650 }, data: { label: '5' } },
-    { id: '6', type: 'assistantNode', position: { x: 1300, y: 400 }, data: { label: '6' } },
+    { id: '1', type: 'modelNode', position: { x: -100, y: 350 }, data: { } },
+    { id: '2', type: 'portraitNode', position: { x: 306, y: 50 }, data: { } },
+    { id: '3', type: 'modelConfigNode', position: { x: 300, y: 500 }, data: { } },
+    { id: '4', type: 'knowledgeNode', position: { x: 800, y: 500 }, data: { } },
+    { id: '5', type: 'guidNode', position: { x: 800, y: 650 }, data: { } },
+    { id: '6', type: 'assistantNode', position: { x: 1300, y: 400 }, data: { } },
 ];
 const initialEdges = [
     { id: 'e1-2', source: '1', target: '2', animated: true, style: { stroke: '#024DE3', strokeWidth: 1 } },
@@ -59,11 +60,23 @@ export default function BuildAssisFlow() {
     const location = useLocation()
     const setOnline = useAssisOnlineStore((state:any) => state.setOnline)
     const { assistant, setAssistant } = useAssistant()
+    const [ searchParams ] = useSearchParams();
+    const assistantId = searchParams.get('id')
 
     useEffect(() => {
-        console.log(location.state)
-        setAssistant({ ...assistant, id: location.state.id })
-    }, [])
+        if (assistantId) {
+            getAssistant(assistantId).then(res => {
+                setAssistant(res.data.data)
+            })
+            return
+        }
+        if (location.state) {
+            setAssistant({ ...assistant, id: location.state.id })
+        }
+        return () => {
+            setAssistant({})
+        }
+    }, [assistantId, location.state])
 
     // 上线助手
     const handleOnline = async () => {
@@ -78,6 +91,8 @@ export default function BuildAssisFlow() {
     const handleSave = () => {
         console.log(assistant)
         updateAssistant(0, assistant)
+        // 创建应用
+        createApplication('');
     }
 
     const onConnect = useCallback(
@@ -89,10 +104,10 @@ export default function BuildAssisFlow() {
         <div className="w-full h-[65px] flex justify-between items-center border-b">
             <div className="flex space-x-4 pl-4 items-center">
                 <div className="flex items-center">
-                    <div id="a1" className={`w-7 h-7 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: location.state.avatar }}>
+                    <div id="a1" className={`w-7 h-7 rounded-lg mr-3 flex justify-center items-center`} style={{ backgroundColor: assistant.avatar }}>
                         <RobotIcon className="w-6 h-6 text-[white]" />
                     </div>
-                    <span className="text-xl">{location.state.name}</span>
+                    <span className="text-xl">{assistant.name}</span>
                 </div>
                 <EditIcon className="w-5 h-5 cursor-pointer" />
             </div>

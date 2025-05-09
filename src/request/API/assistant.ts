@@ -22,6 +22,11 @@ export const updateAssistant = async (online = 0, data: any) => {
     })
 }
 
+// 获取助手详情
+export const getAssistant = async (id: string) => {
+    return customAxios.get(`/assistant/detail?id=${id}`)
+}
+
 // 首页助手
 export const getOnlineAssistants = async () => {
     return customAxios.get(`/assistant/list?user_id=${user.id}`)
