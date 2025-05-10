@@ -114,10 +114,10 @@ function BuildDialog({ open, onCancel, onBuild }:
     </Dialog>
 }
 
-import { getPortrait } from "@/request/model_api/portrait"
 import Loading from "../Loading"
-import { createAssistant, getAssistants } from "@/request/API/assistant"
+import { createAssistant, getAssistant, getAssistants } from "@/request/API/assistant"
 import { useToast } from '@/hooks/use-toast'
+import { useAssistant } from "@/store/flowNode"
 
 export default function BuildPage() {
 
@@ -127,6 +127,7 @@ export default function BuildPage() {
     const build = useIndexViewBuildStore((state: any) => state.build)
     const setUnBuild = useIndexViewBuildStore((state: any) => state.setUnBuild)
     const { toast } = useToast()
+    const { assistant, setAssistant } = useAssistant()
 
     useEffect(() => {
         build && setOpen(true)
@@ -149,7 +150,6 @@ export default function BuildPage() {
 
     const [creating, setCreating] = useState(false)
     const handleCreate = async (data: Assistant) => {
-        console.log(open)
         // await getPortrait(data.description)
         const res = await createAssistant(data)
         if(res.data.code === 200) {
@@ -164,7 +164,10 @@ export default function BuildPage() {
     }
 
     const handleSetting = (id: number) => {
-        navigate(`/layout/assistant?id=${id}`)
+        getAssistant(String(id)).then(res => {
+            setAssistant(res.data.data)
+            navigate(`/layout/assistant?id=${id}`)
+        })
     }
 
     const handleDelete = (e: any, id: number) => {

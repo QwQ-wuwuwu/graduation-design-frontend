@@ -74,13 +74,7 @@ export const uploadAllFiles = async (fileList: File[], onProgress: (progresses: 
     return await Promise.all(requests)
 }
 
-export const deepseekTest = async () => {
-    return await customAxios.post(`http://localhost:11434/api/generate`,{
-        "model": "deepseek-r1:7b",
-        "prompt": "为什么天空是蓝色的? Respond using JSON",
-        "format": "json",
-        "stream": false
-    }, {
-        timeout: 100 * 1000
-    })
+// 获取真实向量知识库 id
+export const getKnowledgeIds = async (ids: string) => {
+    return await customAxios.get(`/knowledge/ids?ids=${ids}`)
 }

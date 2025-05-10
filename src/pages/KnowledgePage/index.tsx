@@ -14,7 +14,6 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom"
 import { EditIcon } from "lucide-react"
 import DropFile from "@/components/my-ui/DropFile"
-import { deepseekTest } from "@/request/API/knowledge"
 
 export default function KnowledgePage() {
 
@@ -42,10 +41,6 @@ export default function KnowledgePage() {
     const handleQACreate = async () => {
         loadQAList()
         setQAOpen(false)
-    }
-
-    const handleTest = async () => {
-        await deepseekTest()
     }
 
     const Header = useMemo(() => {

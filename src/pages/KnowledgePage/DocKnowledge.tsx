@@ -55,7 +55,7 @@ export default function DocKnowledge() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {docList.map((item) => <TableRow key={item.id}>
+                {docList.map((item) => <TableRow onClick={() => handleDetail(item.id)} key={item.id} className=" cursor-pointer">
                     <TableCell>{item.id}</TableCell>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.model_name}</TableCell>

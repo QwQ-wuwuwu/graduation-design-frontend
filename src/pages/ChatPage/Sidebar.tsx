@@ -15,11 +15,11 @@ type Assistant = {
 export default function Sidebar(
     { 
         onSelect,
-        onShow 
+        onlines
     }
     : { 
         onSelect: (id: number) => void,
-        onShow: () => void
+        onlines: any[]
     }
 ) {
 
@@ -29,20 +29,14 @@ export default function Sidebar(
     const setOffline = useAssisOnlineStore((state:any) => state.setOffline)
 
     useEffect(() => {
-        getOnlineAssistants().then((res: any) => {
-            const list = res.data.data
-            if (list.length > 0) {
-                onShow()
-                setAssistants(list.map((l: any) => ({ 
-                    id: l.id, 
-                    name: l.name, 
-                    description: l.description, 
-                    target: false,
-                    avatar: l.avatar
-                 })))
-            }
-        })
-    }, [])
+        onlines.length > 0 && setAssistants(onlines.map((l: any) => ({ 
+            id: l.id, 
+            name: l.name, 
+            description: l.description, 
+            target: false,
+            avatar: l.avatar
+        })))
+    }, [onlines])
 
     useEffect(() => {
         if(onlineId !== -1) {

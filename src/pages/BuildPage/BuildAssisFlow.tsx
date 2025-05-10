@@ -12,9 +12,9 @@ import {
 import RobotIcon from "@/components/icons/robot"
 import { EditIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useAssisOnlineStore from '@/hooks/assistantOnline';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import AssistantNode from './component/AssistantNode';
 import PortraitNode from './component/PortraitNode';
 import ModelConfigNode from './component/ModelConfigNode';
@@ -22,8 +22,7 @@ import KnowledgeNode from './component/KnowledgeNode';
 import GuidNode from './component/GuidNode';
 import ModelNode from './component/ModelNode';
 import { useAssistant } from '@/store/flowNode';
-import { getAssistant, updateAssistant } from '@/request/API/assistant';
-import { createApplication } from '@/request/model_api/application';
+import { updateAssistant } from '@/request/API/assistant';
 
 const nodeTypes = { 
     assistantNode: AssistantNode,
@@ -39,7 +38,7 @@ const initialNodes = [
     { id: '2', type: 'portraitNode', position: { x: 306, y: 50 }, data: { } },
     { id: '3', type: 'modelConfigNode', position: { x: 300, y: 500 }, data: { } },
     { id: '4', type: 'knowledgeNode', position: { x: 800, y: 500 }, data: { } },
-    { id: '5', type: 'guidNode', position: { x: 800, y: 650 }, data: { } },
+    { id: '5', type: 'guidNode', position: { x: 800, y: 750 }, data: { } },
     { id: '6', type: 'assistantNode', position: { x: 1300, y: 400 }, data: { } },
 ];
 const initialEdges = [
@@ -60,27 +59,15 @@ export default function BuildAssisFlow() {
     const location = useLocation()
     const setOnline = useAssisOnlineStore((state:any) => state.setOnline)
     const { assistant, setAssistant } = useAssistant()
-    const [ searchParams ] = useSearchParams();
-    const assistantId = searchParams.get('id')
-
+    
     useEffect(() => {
-        if (assistantId) {
-            getAssistant(assistantId).then(res => {
-                setAssistant(res.data.data)
-            })
-            return
-        }
         if (location.state) {
-            setAssistant({ ...assistant, id: location.state.id })
+            setAssistant(location.state)
         }
-        return () => {
-            setAssistant({})
-        }
-    }, [assistantId, location.state])
+    }, [location.state])
 
     // 上线助手
     const handleOnline = async () => {
-        // console.log(assistant)
         setNodes([])
         await updateAssistant(1, assistant)
         navigate('/layout/chat')
@@ -91,8 +78,6 @@ export default function BuildAssisFlow() {
     const handleSave = () => {
         console.log(assistant)
         updateAssistant(0, assistant)
-        // 创建应用
-        createApplication('');
     }
 
     const onConnect = useCallback(

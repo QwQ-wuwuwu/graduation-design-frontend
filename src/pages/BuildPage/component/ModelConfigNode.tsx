@@ -38,12 +38,6 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
 
     useEffect(() => {
         console.log('assistant', assistant)
-        // setAssistant({ 
-        //     ...assistant, 
-        //     temperature: (temperature / 100), 
-        //     max_token: maxToken,
-        //     param_desc: paramDesc,
-        // })
     }, [])
 
     const handleSearchSelectOpen = async () => {
@@ -56,7 +50,14 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
         }
     }
 
-    const handleTaskSelect = (value: string) => setAssistant({ ...assistant, api_id: parseInt(value) })
+    useEffect(() => {
+        handleSearchSelectOpen()
+    }, [])
+
+    const handleTaskSelect = (value: string) => {
+        const task: any = tasks.find((task: any) => task.name === value)
+        setAssistant({ ...assistant, task_name: value, api_id: task.id })
+    }
 
     const handleMaxTokenInput = (e: any) => {
         setMaxToken(e.target.value)
@@ -79,13 +80,16 @@ function ModelConfigNode({ data, isConnectable }: { data: any, isConnectable : b
             </div>
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">核心任务</p>
-                <SearchSelect 
-                    defaultValue={assistant.task_name || ''}
-                    selectValue="选择助手核心任务" 
-                    onOpen={handleSearchSelectOpen} 
-                    list={tasks} 
-                    onSelect={handleTaskSelect} 
-                />
+                <Select defaultValue={assistant.task_name || ''} onValueChange={handleTaskSelect}>
+                    <SelectTrigger>
+                        <SelectValue placeholder='选择助手核心任务' className='bg-white' />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {tasks.map((task: any) => (
+                            <SelectItem value={task.name} key={task.id}>{task.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
             <div className="mt-4 space-y-2">
                 <p className="text-gray-500 font-bold">模型采样温度</p>

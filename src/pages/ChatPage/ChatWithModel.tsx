@@ -72,7 +72,7 @@ export default function ChatWhithModel(
         getAssistantChat(assistant.id).then((res: any) => {
             const info = res.data.data
             setChatInfo(info)
-            setMessages([{ type: 'model', content: info.portrait }])
+            // setMessages([{ type: 'model', content: info.guide_word }])
         })
     }, [assistant])
 
@@ -111,7 +111,9 @@ export default function ChatWhithModel(
         // })
         // chatWithApplication();
         // chatWithApplicationSSE();
-        const { data: { data: { sessionId } } } = await send({});
+        const { data: { data: { sessionId } } } = await send({
+            app_id: chatInfo.application_id
+        }, tempInput);
         const source = new EventSource(`http://localhost:3002/api/chat/stream?sessionId=${sessionId}`);
         source.onopen = () => {
             console.log('Connection opened');

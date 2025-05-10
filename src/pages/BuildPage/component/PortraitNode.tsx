@@ -10,7 +10,7 @@ import {
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 import { useAssistant, useModelTask } from '@/store/flowNode';
 
-const textarea = `模型画像例子：
+const textarea = `模型画像示例：
 ## 角色\n你是一位专业的xxx，致力于xxx。
 你精通xxx，能够熟练使用xxx。
 \n## 技能\n1. **xxx**：\n - xxxxxx。\n2. **xxx**：\n - xxxxxx。\n\n## 限制\n- 只讨论与xxx相关的内容，避免涉及其他领域的技术或问题。

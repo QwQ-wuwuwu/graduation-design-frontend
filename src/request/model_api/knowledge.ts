@@ -19,3 +19,22 @@ export const createKnowledgeApi = async (data: DataInfo) => {
         description: data.description || '',
     })
 }
+
+// 上传文档构建知识
+export const uploadFiles = async (knowledgeId: string, fileList: File[]) => {
+    console.log('fileList:--->', knowledgeId, fileList)
+    const formData = new FormData()
+    fileList.forEach(file => {
+        formData.append(`files`, file)
+    })
+    return await modelAxios.post(`/document/upload_document/${knowledgeId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+// 获取知识文档列表
+export const getKnowledgeDocuments = async (knowledgeId: string) => {
+    return await modelAxios.get(`/document?knowledge_id=${knowledgeId}`)
+}

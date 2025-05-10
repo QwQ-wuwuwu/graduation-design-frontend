@@ -1,8 +1,8 @@
-import { memo, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { Handle, Position } from "@xyflow/react"
-import SearchSelect from "@/components/my-ui/SearchSelect"
 import { getList } from "@/request/API/knowledge"
 import { useAssistant } from "@/store/flowNode"
+import SearchCheckbox from "@/components/my-ui/SearchCheckbox"
 
 function KnowledgeNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
@@ -11,12 +11,29 @@ function KnowledgeNode({ data, isConnectable }: { data: any, isConnectable : boo
 
     const handleSearchSelectOpen = async () => {
         const { data: { data } } = await getList()
-        setList(data)
+        let copyData = data
+        if (assistant.knowledge_ids) {
+            const owners = assistant.knowledge_ids.split(',').map((d: any) => Number(d))
+            copyData = data.map((d: any) => ({
+                ...d,
+                checked: owners.includes(d.id)
+            }))
+        }
+        setList(copyData)
     }
 
-    const handleKnowledgeSelect = (value: string) => setAssistant({ ...assistant, knowledge_ids: value })
+    useEffect(() => {
+        handleSearchSelectOpen()
+    }, [])
 
-    return <div className='flex justify-center items-center w-[350px] h-[100px] group'>
+    const handleKnowledgeSelect = (value: any[]) => {
+        setAssistant({
+            ...assistant,
+            knowledge_ids: value.join(',')
+        })
+    }
+
+    return <div className='flex justify-center items-center w-[350px] h-[200px] group'>
         <Handle
             type="target"
             position={Position.Left}
@@ -26,11 +43,9 @@ function KnowledgeNode({ data, isConnectable }: { data: any, isConnectable : boo
         />
         <div className='m-2 border group-hover:border group-hover:border-[#024DE3] w-full h-full bg-[#F7F8FB] rounded-lg text-center text-sm p-2 space-y-2'>
             <span className="text-gray-500 font-bold">知识库{data.label}</span>
-            <SearchSelect 
-                list={list} 
-                selectValue="选择知识库" 
+            <SearchCheckbox 
+                data={list}
                 onSelect={handleKnowledgeSelect}
-                onOpen={handleSearchSelectOpen} 
             />
         </div>
         <Handle

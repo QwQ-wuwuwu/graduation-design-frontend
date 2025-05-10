@@ -6,7 +6,7 @@ import { useAssistant } from '@/store/flowNode';
 function PortraitNode({ data, isConnectable }: { data: any, isConnectable : boolean }) {
 
     const { assistant, setAssistant } = useAssistant()
-
+    
     const handleChange = (e: any) => setAssistant({ ...assistant, guide_word: e.target.value })
 
     return <div className='flex justify-center items-center w-[350px] h-[120px] group'>

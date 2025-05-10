@@ -14,6 +14,8 @@ import { useDropzone } from 'react-dropzone';
 import CloseIcon from "../icons/close";
 import FileIcon from "../icons/file";
 import { Progress } from "../ui/progress";
+import { uploadFiles } from "@/request/model_api/knowledge";
+import { useKnowDetailStore } from "@/store/knowledge";
 
 type Props = {
     open: boolean,
@@ -40,17 +42,15 @@ export default function DropFile({
         setFileList(pre => fileListRemoveDuplicates([...pre, ...acceptedFiles]))
     }, [acceptedFiles])
 
+    const knowledge: any = useKnowDetailStore((state:any) => state.knowledge)
     const handleUpload = async () => {
-        // console.log('newFiles-->', fileList)
+        console.log('newFiles-->', fileList)
+        uploadFiles(knowledge.knowledge_id, fileList);
         uploadAllFiles(fileList, (progresses: number[]) => {
             console.log('progresses-->', progresses)
             setProgresses([...progresses])
         }).then(() => onUpload())
     }
-
-    // useEffect(() => {
-    //     console.log('changeProgresses-->', progresses)
-    // }, [progresses])
 
     const handleDelete = (id: string) => {
         const newFiles = fileList.filter(file => file.lastModified !== parseInt(id))
@@ -92,20 +92,20 @@ export default function DropFile({
                     {fileList.length > 0 && <div className="w-[600px] h-[450px] pt-4 overflow-y-auto scrollbar-hide ">
                         {progresses.length > 0 ? <div>
                             {fileList.map((file, index) => <div key={file.lastModified} className="mb-2">
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-start space-x-2">
                                     <FileIcon className={'text-blue-600'} />
                                     <p className="text-gray-500 text-md font-medium">{file.name}</p>
                                 </div>
                                 <Progress value={progresses[index]} className="" />
                             </div>)}
                         </div> : <div>
-                            {fileList.map((file) => <div key={file.lastModified} className="flex justify-between items-center mb-2">
-                                <div className="flex items-center space-x-2">
+                            {fileList.map((file) => <div key={file.lastModified} className="flex justify-between items-start mb-2">
+                                <div className="flex items-start space-x-2">
                                     <FileIcon className={'text-blue-600'} />
                                     <p className="text-gray-500 text-md font-medium">{file.name}</p>
                                 </div>
                                 {/* @ts-ignore */}
-                                <CloseIcon onClick={() => handleDelete(file.lastModified)} className="w-4 h-4 cursor-pointer" />
+                                <CloseIcon onClick={() => handleDelete(file.lastModified)} className="w-4 mt-1 h-4 cursor-pointer" />
                             </div>)}
                         </div>}
                     </div>}
