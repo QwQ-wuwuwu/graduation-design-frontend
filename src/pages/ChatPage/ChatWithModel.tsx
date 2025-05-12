@@ -12,14 +12,10 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-// import { chatWithZhiPuModel } from "@/request/model_api/chat"
 import { useEffect, useRef, useState } from "react"
 import { marked } from 'marked';
 import { getAssistantChat } from "@/request/API/assistant"
 import { send } from "@/request/API/chat"
-// import { chatWithApplication, chatWithApplicationSSE, chatWithModel, initialChat } from "@/request/model_api/chat"
-// import { useModelChat } from "@/hooks/useModelChat"
-// import { EventSourcePolyfill } from "event-source-polyfill"
 
 export default function ChatWhithModel(
     { 
@@ -82,39 +78,10 @@ export default function ChatWhithModel(
         setMessages([...messages,{ type: 'user', content: tempInput}, { type: 'model', content: '' }])
         setInput('')
         setDisabled(true)
-        // chatWithModel(chatInfo, []).then((res: any) => {
-        //     const result = res.data.choices[0].message.content
-        //     let index = 0, str = ''
-        //     let randomNum = Math.floor(Math.random() * 10 + 1)
-        //     const id = setInterval(() => {
-        //         str += result.slice(index, index + randomNum)
-        //         index += randomNum
-        //         randomNum = Math.floor(Math.random() * 10 + 1)
-        //         setMessages(pre => pre.map((msg, i) => i === pre.length - 1 ? { ...msg, content: str } : msg))
-        //         if(index >= result.length - 1) {
-        //             clearInterval(id)
-        //             setTimeId(null)
-        //             setDisabled(false)
-        //         }
-        //     }, 100)
-        //     setTimeId(id)
-        // }, () => {
-        //     setDisabled(false)
-        //     setMessages(pre => pre.map((msg) => msg.content === '' ? { type: 'model', content: '哎呦~网络似乎出了点小问题呢' } : msg))
-        // })
-        // 用于测试的应用id：1919369230273437696
-        // chatWithModel(chatInfo, [], (text: string) => {
-        //     setMessages(pre => pre.map((msg, i) => i === pre.length - 1 
-        //         ? { ...msg, content: msg.content + text } 
-        //         : msg))
-        //     setDisabled(false)
-        // })
-        // chatWithApplication();
-        // chatWithApplicationSSE();
-        const { data: { data: { sessionId } } } = await send({
-            app_id: chatInfo.application_id
-        }, tempInput);
-        const source = new EventSource(`http://localhost:3002/api/chat/stream?sessionId=${sessionId}`);
+        
+        await send(chatInfo, tempInput);
+        const query = `applicationId=${chatInfo.application_id}&assistantId=${chatInfo.id}&userId=${user.current.id}`
+        const source = new EventSource(`http://localhost:3002/api/chat/stream?applicationId=${chatInfo.application_id}`);
         source.onopen = () => {
             console.log('Connection opened');
         }

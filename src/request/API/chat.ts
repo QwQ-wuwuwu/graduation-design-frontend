@@ -1,11 +1,15 @@
+import { User } from "@/types";
 import customAxios from "../common_axios";
 
-const modelToken = '7e8ccaf56ec747e0a15504d1091deb1d.ehUDl9cEUUcWIoit';
 // 大模型接口创建的助手发送消息函数
-export const send = async (data: any, msg: string) => {
-    data.api_key = modelToken
-    data.prompt = [
-        { 'role': 'user', 'content': msg }
-    ]
+export const send = async (chatInfo: any, msg: string) => {
+    const user: User = JSON.parse(sessionStorage.getItem('user') as string);
+    const data = {
+        prompt:[
+            { 'role': 'user', 'content': msg }
+        ],
+        assistantId: chatInfo.id,
+        userId: user.id,
+    }
     return await customAxios.post('/chat/init', data)
 }
