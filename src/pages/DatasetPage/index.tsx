@@ -82,8 +82,10 @@ export default function DatasetPage() {
         <Table className="mt-8 mb-[80px]">
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">数据集名称</TableHead>
+                    <TableHead>来源</TableHead>
+                    <TableHead>创建时间</TableHead>
+                    <TableHead className="text-right">操作</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -91,6 +93,11 @@ export default function DatasetPage() {
                 <TableRow key={index}>
                     <TableCell className="font-medium">{invoice.type}</TableCell>
                     <TableCell>{invoice.content}</TableCell>
+                    <TableCell>2025-05-10</TableCell>
+                    <TableCell className="text-right space-x-4">
+                        <Button variant={'link'} className="text-blue-600 px-0">设置</Button>
+                        <Button variant={'link'} className="text-red-500 px-0">删除</Button>
+                    </TableCell>
                 </TableRow>
                 ))}
             </TableBody>

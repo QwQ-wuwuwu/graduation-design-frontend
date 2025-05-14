@@ -118,7 +118,7 @@ export default function HeaderMenu() {
                     <TabsList className='space-x-3 h-full'>
                         <TabsTrigger value='model' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />模型实况</TabsTrigger>
                         <TabsTrigger value='user' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />用户管理</TabsTrigger>
-                        <TabsTrigger value='assistant' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />助手管理</TabsTrigger>
+                        {/* <TabsTrigger value='assistant' className='data-[state=active]:text-[#024DE3] w-[150px] h-10'><TabIcon className='mr-2' />助手管理</TabsTrigger> */}
                     </TabsList>
                 </Tabs>
             </div>}

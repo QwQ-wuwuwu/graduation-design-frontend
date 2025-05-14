@@ -29,7 +29,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src")
+      "@": path.resolve(__dirname, "./src"),
+      // 解决导入 recharts 时无法找到react-smooth 路径问题
+      'react-smooth': path.resolve(__dirname, './node_modules/react-smooth/es6/Animate.js'),
     },
     extensions: ['.ts', '.tsx', '.json']
   },
@@ -37,7 +39,11 @@ export default defineConfig({
   clearScreen: false, // 终端禁止清屏
   // appType: 'spa',
   optimizeDeps: {
-    force: true // 强制预构建，可能导致构建速度变慢
+    // force: true // 强制预构建，可能导致构建速度变慢
+    include: [ // 预构建依赖
+      'react-smooth',
+      'recharts'
+    ]
   },
   build: {
     minify: 'esbuild', // 压缩方式

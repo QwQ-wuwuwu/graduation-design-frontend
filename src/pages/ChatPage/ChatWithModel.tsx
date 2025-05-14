@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 import { useEffect, useRef, useState } from "react"
 import { marked } from 'marked';
 import { getAssistantChat } from "@/request/API/assistant"
-import { send } from "@/request/API/chat"
+import { send, getMessageList } from "@/request/API/chat"
 
 export default function ChatWhithModel(
     { 
@@ -70,6 +70,15 @@ export default function ChatWhithModel(
             setChatInfo(info)
             // setMessages([{ type: 'model', content: info.guide_word }])
         })
+        getMessageList(assistant.id, user.current.id).then((res: any) => {
+            const list = res.data.data
+            setMessages(list.map((item: any) => {
+                return {
+                    role: item.message.role,
+                    content: item.message.content
+                }
+            }))
+        })
     }, [assistant])
 
     const handleClick = async () => {
@@ -81,7 +90,7 @@ export default function ChatWhithModel(
         
         await send(chatInfo, tempInput);
         const query = `applicationId=${chatInfo.application_id}&assistantId=${chatInfo.id}&userId=${user.current.id}`
-        const source = new EventSource(`http://localhost:3002/api/chat/stream?applicationId=${chatInfo.application_id}`);
+        const source = new EventSource(`http://localhost:3002/api/chat/stream?${query}`);
         source.onopen = () => {
             console.log('Connection opened');
         }
@@ -118,7 +127,7 @@ export default function ChatWhithModel(
     return <div className={cn(className, ' bg-gradient-to-r from-white to-[#F4F5F8]')}>
         <div ref={scorllareaRef} className={`max-w-[700px] min-w-[400px] rounded-lg pt-2 pb-[100px] h-[calc(100%-85px-38px)] scrollbar-hide overflow-y-auto m-auto`}>
             {messages.map((message, index) => (
-                message.type === 'model' 
+                message.role === 'assistant' 
                 ? <div key={index} className="flex justify-start mb-8">
                     <div style={{backgroundColor: assistant.avatar}} 
                         className="w-[40px] h-[40px] text-center min-w-[40px] rounded-full">
